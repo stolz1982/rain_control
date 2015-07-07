@@ -4,3 +4,4 @@
 #git add <Filename> or git add *
 #git commit -m "Commit message"
 #git push origin master
+#git pull origin master
