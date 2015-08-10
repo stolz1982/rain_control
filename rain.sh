@@ -25,11 +25,17 @@
 LOG=./RAIN_CONTROL.log
 ERR=./RAIN_CONTROL.err
 
+
+#Script Start
+echo "################################################" >> $LOG
+echo "[START] RAIN SKRIPT" >> $LOG
+echo "################################################" >> $LOG
+
 #Turn of all connected GPIOS (in total 8 because of I am using an 8 channel relay)
 for i in 17 17 17 17 17 17 17 17
  do
  gpio -g write i 1
- echo `date +%Y%m%d-%H%M%S`": GPIO Input #$i - STATUS: $(gpio -g read $i)" >> $LOG
+ echo `date +%Y%m%d-%H%M%S`": GPIO Input #$i - STATUS: $(gpio -g read i)" >> $LOG
 done
 
 #firstly, check whether parameters has been entered
@@ -58,5 +64,11 @@ sleep $2
 #Turn off GPIO Input
 gpio -g write $1 1
 
- echo `date +%Y%m%d-%H%M%S`": GPIO Input \#$i - STATUS: $(gpio -g read $i)" >> $LOG
+ echo `date +%Y%m%d-%H%M%S`": GPIO Input #$i - STATUS: $(gpio -g read $1)" >> $LOG
+
+
+#Script End
+echo "################################################" >> $LOG
+echo "[END] RAIN SKRIPT" >> $LOG
+echo "################################################" >> $LOG
 
