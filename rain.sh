@@ -34,8 +34,10 @@ echo "################################################" >> $LOG
 #Turn of all connected GPIOS (in total 8 because of I am using an 8 channel relay)
 for i in 17 17 17 17 17 17 17 17
  do
- gpio -g write i 1
- echo `date +%Y%m%d-%H%M%S`": GPIO Input #$i - STATUS: $(gpio -g read i)" >> $LOG
+ gpio -g write $i 1
+now=`date +%Y%m%d-%H%M%S`
+#echo "GPIO Input #$i - STATUS: $(gpio -g read $i)" >> $LOG
+echo "$now: GPIO Input #$i - STATUS: $(gpio -g read $i)" >> $LOG
 done
 
 #firstly, check whether parameters has been entered
