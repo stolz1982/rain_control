@@ -22,22 +22,23 @@
 #######################################################
 
 #DEFINITION VARIABLES
-LOG=./RAIN_CONTROL.log
-ERR=./RAIN_CONTROL.err
+LOG="/home/user01/skript/rain_control/RAIN.log"
+ERR="/home/user01/skript/rain_control/RAIN.err"
 
+#Initial deleting ERR File
+rm $ERR
 
 #Script Start
 echo "################################################" >> $LOG
-echo "[START] RAIN SKRIPT" >> $LOG
+echo "#[START] RAIN SKRIPT" >> $LOG
 echo "################################################" >> $LOG
 
 #Turn of all connected GPIOS (in total 8 because of I am using an 8 channel relay)
-for i in 17 17 17 17 17 17 17 17
- do
+for i in 17 18 27 22 23 24 10 9
+do
  gpio -g write $i 1
 now=`date +%Y%m%d-%H%M%S`
-#echo "GPIO Input #$i - STATUS: $(gpio -g read $i)" >> $LOG
-echo "$now: GPIO Input #$i - STATUS: $(gpio -g read $i)" >> $LOG
+echo $now": GPIO Input $i - STATUS: $(/usr/local/bin/gpio -g read $i)" >> $LOG
 done
 
 #firstly, check whether parameters has been entered
@@ -58,19 +59,19 @@ if [ -n "$2" ]
 fi
 
 #set gpio input status = 0 which opens the appropriate ventile
-#gpio write -g $1 0
+/usr/local/bin/gpio -g write $1 0
 
 #Waiting the entered time period before closing ventile
 sleep $2
 
 #Turn off GPIO Input
-gpio -g write $1 1
+/usr/local/bin/gpio -g write $1 1
 
- echo `date +%Y%m%d-%H%M%S`": GPIO Input #$i - STATUS: $(gpio -g read $1)" >> $LOG
+ echo `date +%Y%m%d-%H%M%S`": GPIO Input $1 - STATUS: $(/usr/local/bin/gpio -g read $1)" >> $LOG
 
 
 #Script End
 echo "################################################" >> $LOG
-echo "[END] RAIN SKRIPT" >> $LOG
+echo "#[END] RAIN SKRIPT" >> $LOG
 echo "################################################" >> $LOG
 
