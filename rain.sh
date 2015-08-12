@@ -16,7 +16,7 @@
 #
 # GPIO Inputs and related Ventiles locations
 # 17 = in front of the house
-# 
+# 18 = the path to the garage (beside the house)
 #
 #
 #######################################################
@@ -26,7 +26,7 @@ LOG="/home/user01/skript/rain_control/RAIN.log"
 ERR="/home/user01/skript/rain_control/RAIN.err"
 
 #Initial deleting ERR File
-rm $ERR
+rm -f $ERR
 
 #Script Start
 echo "################################################" >> $LOG
