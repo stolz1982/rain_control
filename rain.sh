@@ -8,7 +8,9 @@
 # Text: small script for handling/managing GPIOs of a
 #       RaspianPi in order to control ventiles which
 #	which are part of the system
-#	Also, timer functions are necessary	
+#	Also, timer functions are necessary and 
+#	weather forecast data powered by wetter.com
+#       http://www.wetter.com	
 #
 #######################################################
 
@@ -24,9 +26,15 @@
 #DEFINITION VARIABLES
 LOG="/home/user01/skript/rain_control/RAIN.log"
 ERR="/home/user01/skript/rain_control/RAIN.err"
+FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
+FC_FILE="/home/user01/skript/rain_control/WEATHER.DAT"
 
-#Initial deleting ERR File
+#Initial deleting Files
 rm -f $ERR
+rm -f $FC_FILE
+
+#Getting weather forecast data for my hometown
+wget $FC -O $FC_FILE 1>/dev/null 2>>$ERR
 
 #Script Start
 echo "################################################" >> $LOG

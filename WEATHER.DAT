@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<city>
+  <city_code>DE0007167</city_code>
+  <name>Nauen</name>
+  <url>deutschland/nauen/DE0007167.html</url>
+  <post_code>14641</post_code>
+  <credit>
+    <!--In order to use the free weather data from wetter.com you HAVE TO display at least two out of three of the following possibilities: text, link, logo-->
+    <text>Powered by wetter.com</text>
+    <link>http://www.wetter.com</link>
+    <logo>Download at http://www.wetter.com/api/downloads/#logos</logo>
+  </credit>
+  <forecast>
+    <date value="2015-08-13">
+      <w>2</w>
+      <tx>27</tx>
+      <time value="06:00">
+        <w>2</w>
+        <tx>22</tx>
+        <tn>17</tn>
+        <p>5</p>
+        <d>1439445600</d>
+        <w_txt>wolkig</w_txt>
+      </time>
+      <time value="11:00">
+        <w>2</w>
+        <tx>27</tx>
+        <tn>22</tn>
+        <p>6</p>
+        <d>1439463600</d>
+        <w_txt>wolkig</w_txt>
+      </time>
+      <time value="17:00">
+        <w>1</w>
+        <tx>27</tx>
+        <tn>23</tn>
+        <p>6</p>
+        <d>1439485200</d>
+        <w_txt>leicht bewölkt</w_txt>
+      </time>
+      <time value="23:00">
+        <w>1</w>
+        <tx>23</tx>
+        <tn>20</tn>
+        <p>6</p>
+        <d>1439506800</d>
+        <w_txt>leicht bewölkt</w_txt>
+      </time>
+      <d>1439445600</d>
+      <tn>17</tn>
+      <p>24</p>
+      <w_txt>wolkig</w_txt>
+    </date>
+  </forecast>
+</city>
