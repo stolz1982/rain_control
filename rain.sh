@@ -24,8 +24,8 @@
 #######################################################
 
 #DEFINITION VARIABLES
-LOG="/home/user01/skript/rain_control/RAIN.log"
-ERR="/home/user01/skript/rain_control/RAIN.err"
+LOG="/home/user01/skript/rain_control/RAIN_$1.log"
+ERR="/home/user01/skript/rain_control/RAIN_$1.err"
 FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
 FC_FILE="/home/user01/skript/rain_control/WEATHER.DAT"
 
