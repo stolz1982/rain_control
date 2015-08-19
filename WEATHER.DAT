@@ -11,45 +11,45 @@
     <logo>Download at http://www.wetter.com/api/downloads/#logos</logo>
   </credit>
   <forecast>
-    <date value="2015-08-14">
-      <w>1</w>
-      <tx>32</tx>
+    <date value="2015-08-19">
+      <w>2</w>
+      <tx>25</tx>
       <time value="06:00">
-        <w>1</w>
-        <tx>27</tx>
-        <tn>20</tn>
+        <w>2</w>
+        <tx>20</tx>
+        <tn>15</tn>
         <p>5</p>
-        <d>1439532000</d>
-        <w_txt>leicht bewölkt</w_txt>
+        <d>1439964000</d>
+        <w_txt>wolkig</w_txt>
       </time>
       <time value="11:00">
-        <w>1</w>
-        <tx>31</tx>
-        <tn>27</tn>
+        <w>2</w>
+        <tx>24</tx>
+        <tn>20</tn>
         <p>6</p>
-        <d>1439550000</d>
-        <w_txt>leicht bewölkt</w_txt>
+        <d>1439982000</d>
+        <w_txt>wolkig</w_txt>
       </time>
       <time value="17:00">
-        <w>3</w>
-        <tx>32</tx>
-        <tn>26</tn>
-        <p>6</p>
-        <d>1439571600</d>
-        <w_txt>bedeckt</w_txt>
-      </time>
-      <time value="23:00">
         <w>1</w>
-        <tx>26</tx>
-        <tn>22</tn>
+        <tx>25</tx>
+        <tn>18</tn>
         <p>6</p>
-        <d>1439593200</d>
+        <d>1440003600</d>
         <w_txt>leicht bewölkt</w_txt>
       </time>
-      <d>1439532000</d>
-      <tn>20</tn>
+      <time value="23:00">
+        <w>0</w>
+        <tx>18</tx>
+        <tn>14</tn>
+        <p>6</p>
+        <d>1440025200</d>
+        <w_txt>klar</w_txt>
+      </time>
+      <d>1439964000</d>
+      <tn>15</tn>
       <p>24</p>
-      <w_txt>leicht bewölkt</w_txt>
+      <w_txt>wolkig</w_txt>
     </date>
   </forecast>
 </city>

@@ -26,15 +26,238 @@
 #DEFINITION VARIABLES
 LOG="/home/user01/skript/rain_control/RAIN_$1.log"
 ERR="/home/user01/skript/rain_control/RAIN_$1.err"
+DATEI="/home/user01/skript/rain_control/WEATHER.DAT"
 FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
-FC_FILE="/home/user01/skript/rain_control/WEATHER.DAT"
 
 #Initial deleting Files
 rm -f $ERR
 rm -f $FC_FILE
+rm -f $DATEI
 
 #Getting weather forecast data for my hometown
-wget $FC -O $FC_FILE 1>/dev/null 2>>$ERR
+wget $FC -O $DATEI 1>/dev/null 2>&1
+
+#Functions for string processing
+clean () {
+var_str=$1
+var_str=${var_str#*>}
+var_str=${var_str%<*}
+}
+
+translate () {
+var_str_txt=""
+var_rain=0  #beduetet keine Beregnung
+case $1 in
+0)
+  var_str_txt='sonnig'
+  var_rain=1
+  ;;
+1)
+  var_str_txt='leicht bewoelkt'
+  var_rain=1
+  ;;
+2)
+  var_str_txt='wolkig'
+  var_rain=1
+  ;;
+3)
+  var_str_txt='bedeckt'
+  var_rain=1
+  ;;
+4)
+  var_str_txt='Nebel'
+  var_rain=0
+  ;;
+5)
+  var_str_txt='Sprühregen'
+  var_rain=0
+  ;;
+6)
+  var_str_txt='Regen'
+  var_rain=0
+  ;;
+7)
+  var_str_txt='Schauer'
+  var_rain=0
+  ;;
+9)
+  var_str_txt='Gewitter'
+  var_rain=0
+  ;;
+10)
+  var_str_txt='leicht bewölkt'
+  var_rain=1
+  ;;
+20)
+  var_str_txt='wolkig'
+  var_rain=1
+  ;;
+30)
+  var_str_txt='bedeckt'
+  var_rain=1
+  ;;
+40)
+  var_str_txt='Nebel'
+  var_rain=0
+  ;;
+45)
+  var_str_txt='Nebel'
+  var_rain=0
+  ;;
+48)
+  var_str_txt='Nebel mit Reifbildung'
+  var_rain=0
+  ;;
+49)
+  var_str_txt='Nebel mit Reifbildung'
+  var_rain=0
+  ;;
+50)
+  var_str_txt='Sprühregen'
+  var_rain=0
+  ;;
+51)
+  var_str_txt='leichter Spruehregen'
+  var_rain=0
+  ;;
+53)
+  var_str_txt='Sprühregen'
+  var_rain=0
+  ;;
+55)
+  var_str_txt='starker Sprühregen'
+  var_rain=0
+  ;;
+56)
+  var_str_txt='leichter Spruehregen, gefrierend'
+  var_rain=0
+  ;;
+57)
+  var_str_txt='starker Spruehregen, gefrierend'
+  var_rain=0
+  ;;
+60)
+  var_str_txt='leichter Regen'
+  var_rain=0
+  ;;
+61)
+  var_str_txt='leichter Regen'
+  var_rain=0
+  ;;
+63)
+  var_str_txt='maessiger Regen'
+  var_rain=0
+  ;;
+65)
+  var_str_txt='starker Regen'
+  var_rain=0
+  ;;
+66)
+  var_str_txt='leichter Regen, gefrierend'
+  var_rain=0
+  ;;
+67)
+  var_str_txt='maessiger Regen od. starker Regen, gefrierend'
+  var_rain=0
+  ;;
+68)
+  var_str_txt='leichter Schnee-Regen'
+  var_rain=0
+  ;;
+69)
+  var_str_txt='starker Schnee-Regen'
+  var_rain=0
+  ;;
+70)
+  var_str_txt='leichter Schneefall'
+  var_rain=0
+  ;;
+71)
+  var_str_txt='leichter Schneefall'
+  var_rain=0
+  ;;
+73)
+  var_str_txt='maessiger Schneefall'
+  var_rain=0
+  ;;
+75)
+  var_str_txt='starker Schneefall'
+  var_rain=0
+  ;;
+80)
+  var_str_txt='leichter Regen - Schauer'
+  var_rain=0
+  ;;
+81)
+  var_str_txt='Regen - Schauer'
+  var_rain=0
+  ;;
+82)
+  var_str_txt='starker Regen - Schauer'
+  var_rain=0
+  ;;
+83)
+  var_str_txt='leichter Schnee/Regen - Schauer'
+  var_rain=0
+  ;;
+84)
+  var_str_txt='starker Schnee/Regen - Schauer'
+  var_rain=0
+  ;;
+85)
+  var_str_txt='leichter Schnee/Regen - Schauer'
+  var_rain=0
+  ;;
+86)
+  var_str_txt='maessiger oder starker Schnee - Schauer'
+  var_rain=0
+  ;;
+90)
+  var_str_txt='Gewitter'
+  var_rain=0
+  ;;
+95)
+  var_str_txt='leichtes Gewitter'
+  var_rain=0
+  ;;
+96)
+  var_str_txt='starkes Gewitter'
+  var_rain=0
+  ;;
+999)
+  var_str_txt='Keine Angabe'
+  var_rain=0
+  ;;
+*)
+  var_str_txt='neuer Status - Doku prüfen'
+  var_rain=0
+  ;;
+esac
+}
+
+merge () {
+clean $1
+translate $var_str
+}
+
+
+if [ -e $DATEI ]; then
+
+H=$(date +%H)
+if [ 333 -le $H ] && [ $H -lt 11 ]; then 
+ #06:00 a.m. weather 
+ merge $(sed -n '18{p;q}' $DATEI)
+elif [ 11 -le $H ] && [ $H -lt 17 ]; then 
+ #11:00 a.m.
+ merge $(sed -n '26{p;q}' $DATEI)
+elif [ 17 -le $H ] && [ $H -lt 23 ]; then
+ #5 p.m.
+ merge $(sed -n '34{p;q}' $DATEI)
+else
+ #11 p.m.
+ merge $(sed -n '42{p;q}' $DATEI)
+fi
+fi
 
 #Script Start
 echo "################################################" >> $LOG
@@ -66,17 +289,20 @@ if [ -n "$2" ]
      exit 2
 fi
 
+if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
-/usr/local/bin/gpio -g write $1 0
+ /usr/local/bin/gpio -g write $1 0
+ echo `date +%Y%m%d-%H%M%S`": Raining due to $var_str_text" >> $LOG
+ #Waiting the entered time period before closing ventile
+ sleep $2
 
-#Waiting the entered time period before closing ventile
-sleep $2
-
-#Turn off GPIO Input
-/usr/local/bin/gpio -g write $1 1
+ #Turn off GPIO Input
+ /usr/local/bin/gpio -g write $1 1
 
  echo `date +%Y%m%d-%H%M%S`": GPIO Input $1 - STATUS: $(/usr/local/bin/gpio -g read $1)" >> $LOG
-
+else
+ echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain) due to forecasted weather: $var_str_txt" >> $LOG
+fi
 
 #Script End
 echo "################################################" >> $LOG
