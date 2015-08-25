@@ -1,116 +1,213 @@
 ################################################
 #[START] RAIN SKRIPT
 ################################################
-20150816-180001: GPIO Input 17 - STATUS: 1
-20150816-180001: GPIO Input 18 - STATUS: 1
-20150816-180001: GPIO Input 27 - STATUS: 1
-20150816-180001: GPIO Input 22 - STATUS: 1
-20150816-180001: GPIO Input 23 - STATUS: 1
-20150816-180001: GPIO Input 24 - STATUS: 1
-20150816-180001: GPIO Input 10 - STATUS: 1
-20150816-180001: GPIO Input 9 - STATUS: 1
-20150816-180001: You have entered GPIO 17 Input
-20150816-180001: You have entered raintime period in seconds: 420
-20150816-180701: GPIO Input 17 - STATUS: 1
+20150819-180002: GPIO Input 17 - STATUS: 1
+20150819-180002: GPIO Input 18 - STATUS: 1
+20150819-180002: GPIO Input 27 - STATUS: 1
+20150819-180002: GPIO Input 22 - STATUS: 1
+20150819-180002: GPIO Input 23 - STATUS: 1
+20150819-180002: GPIO Input 24 - STATUS: 1
+20150819-180002: GPIO Input 10 - STATUS: 1
+20150819-180002: GPIO Input 9 - STATUS: 1
+20150819-180002: You have entered GPIO 17 Input
+20150819-180002: You have entered raintime period in seconds: 420
+20150819-180002: Raining due to 
+20150819-180702: GPIO Input 17 - STATUS: 1
 ################################################
 #[END] RAIN SKRIPT
 ################################################
 ################################################
 #[START] RAIN SKRIPT
 ################################################
-20150816-195727: GPIO Input 17 - STATUS: 1
-20150816-195727: GPIO Input 18 - STATUS: 1
-20150816-195727: GPIO Input 27 - STATUS: 1
-20150816-195727: GPIO Input 22 - STATUS: 1
-20150816-195727: GPIO Input 23 - STATUS: 1
-20150816-195727: GPIO Input 24 - STATUS: 1
-20150816-195727: GPIO Input 10 - STATUS: 1
-20150816-195727: GPIO Input 9 - STATUS: 1
-20150816-195727: You have entered GPIO 17 Input
-20150816-195727: You have entered raintime period in seconds: 20
-20150816-195747: GPIO Input 17 - STATUS: 1
+20150820-050002: GPIO Input 17 - STATUS: 1
+20150820-050002: GPIO Input 18 - STATUS: 1
+20150820-050002: GPIO Input 27 - STATUS: 1
+20150820-050002: GPIO Input 22 - STATUS: 1
+20150820-050002: GPIO Input 23 - STATUS: 1
+20150820-050002: GPIO Input 24 - STATUS: 1
+20150820-050002: GPIO Input 10 - STATUS: 1
+20150820-050002: GPIO Input 9 - STATUS: 1
+20150820-050002: You have entered GPIO 17 Input
+20150820-050002: You have entered raintime period in seconds: 300
+20150820-050002: Raining due to 
+20150820-050502: GPIO Input 17 - STATUS: 1
 ################################################
 #[END] RAIN SKRIPT
 ################################################
 ################################################
 #[START] RAIN SKRIPT
 ################################################
-20150817-050002: GPIO Input 17 - STATUS: 1
-20150817-050002: GPIO Input 18 - STATUS: 1
-20150817-050002: GPIO Input 27 - STATUS: 1
-20150817-050002: GPIO Input 22 - STATUS: 1
-20150817-050002: GPIO Input 23 - STATUS: 1
-20150817-050002: GPIO Input 24 - STATUS: 1
-20150817-050002: GPIO Input 10 - STATUS: 1
-20150817-050002: GPIO Input 9 - STATUS: 1
-20150817-050002: You have entered GPIO 17 Input
-20150817-050002: You have entered raintime period in seconds: 300
-################################################
-#[START] RAIN SKRIPT
-################################################
-20150817-180016: GPIO Input 17 - STATUS: 1
-20150817-180016: GPIO Input 18 - STATUS: 1
-20150817-180016: GPIO Input 27 - STATUS: 1
-20150817-180016: GPIO Input 22 - STATUS: 1
-20150817-180016: GPIO Input 23 - STATUS: 1
-20150817-180016: GPIO Input 24 - STATUS: 1
-20150817-180016: GPIO Input 10 - STATUS: 1
-20150817-180016: GPIO Input 9 - STATUS: 1
-20150817-180016: You have entered GPIO 17 Input
-20150817-180016: You have entered raintime period in seconds: 420
-20150817-180016: No Raining (var_rain: 0) due to forecasted weather: leichter Regen
+20150820-180006: GPIO Input 17 - STATUS: 1
+20150820-180006: GPIO Input 18 - STATUS: 0
+20150820-180006: GPIO Input 27 - STATUS: 1
+20150820-180006: GPIO Input 22 - STATUS: 1
+20150820-180006: GPIO Input 23 - STATUS: 1
+20150820-180006: GPIO Input 24 - STATUS: 1
+20150820-180006: GPIO Input 10 - STATUS: 1
+20150820-180006: GPIO Input 9 - STATUS: 1
+20150820-180006: You have entered GPIO 17 Input
+20150820-180006: You have entered raintime period in seconds: 420
+20150820-180006: Raining due to 
+20150820-180706: GPIO Input 17 - STATUS: 1
 ################################################
 #[END] RAIN SKRIPT
 ################################################
 ################################################
 #[START] RAIN SKRIPT
 ################################################
-20150818-050002: GPIO Input 17 - STATUS: 1
-20150818-050002: GPIO Input 18 - STATUS: 1
-20150818-050002: GPIO Input 27 - STATUS: 1
-20150818-050002: GPIO Input 22 - STATUS: 1
-20150818-050002: GPIO Input 23 - STATUS: 1
-20150818-050002: GPIO Input 24 - STATUS: 1
-20150818-050002: GPIO Input 10 - STATUS: 1
-20150818-050002: GPIO Input 9 - STATUS: 1
-20150818-050002: You have entered GPIO 17 Input
-20150818-050002: You have entered raintime period in seconds: 300
-20150818-050002: No Raining (var_rain: 0) due to forecasted weather: leichter Regen
+20150821-050002: GPIO Input 17 - STATUS: 1
+20150821-050002: GPIO Input 18 - STATUS: 1
+20150821-050002: GPIO Input 27 - STATUS: 1
+20150821-050002: GPIO Input 22 - STATUS: 1
+20150821-050002: GPIO Input 23 - STATUS: 1
+20150821-050002: GPIO Input 24 - STATUS: 1
+20150821-050002: GPIO Input 10 - STATUS: 1
+20150821-050002: GPIO Input 9 - STATUS: 1
+20150821-050002: You have entered GPIO 17 Input
+20150821-050002: You have entered raintime period in seconds: 300
+20150821-050002: Raining due to 
+20150821-050502: GPIO Input 17 - STATUS: 1
 ################################################
 #[END] RAIN SKRIPT
 ################################################
 ################################################
 #[START] RAIN SKRIPT
 ################################################
-20150818-180002: GPIO Input 17 - STATUS: 1
-20150818-180002: GPIO Input 18 - STATUS: 1
-20150818-180002: GPIO Input 27 - STATUS: 1
-20150818-180002: GPIO Input 22 - STATUS: 1
-20150818-180002: GPIO Input 23 - STATUS: 1
-20150818-180002: GPIO Input 24 - STATUS: 1
-20150818-180002: GPIO Input 10 - STATUS: 1
-20150818-180002: GPIO Input 9 - STATUS: 1
-20150818-180002: You have entered GPIO 17 Input
-20150818-180003: You have entered raintime period in seconds: 420
-20150818-180003: No Raining (var_rain: 0) due to forecasted weather: leichter Regen
+20150821-180021: GPIO Input 17 - STATUS: 1
+20150821-180021: GPIO Input 18 - STATUS: 1
+20150821-180022: GPIO Input 27 - STATUS: 1
+20150821-180022: GPIO Input 22 - STATUS: 1
+20150821-180022: GPIO Input 23 - STATUS: 1
+20150821-180022: GPIO Input 24 - STATUS: 1
+20150821-180022: GPIO Input 10 - STATUS: 1
+20150821-180022: GPIO Input 9 - STATUS: 1
+20150821-180022: You have entered GPIO 17 Input
+20150821-180022: You have entered raintime period in seconds: 420
+20150821-180022: No Raining (var_rain: 0) due to forecasted weather: neuer Status - Doku prüfen
 ################################################
 #[END] RAIN SKRIPT
 ################################################
 ################################################
 #[START] RAIN SKRIPT
 ################################################
-20150819-050007: GPIO Input 17 - STATUS: 1
-20150819-050007: GPIO Input 18 - STATUS: 0
-20150819-050007: GPIO Input 27 - STATUS: 1
-20150819-050007: GPIO Input 22 - STATUS: 1
-20150819-050007: GPIO Input 23 - STATUS: 1
-20150819-050007: GPIO Input 24 - STATUS: 1
-20150819-050007: GPIO Input 10 - STATUS: 1
-20150819-050007: GPIO Input 9 - STATUS: 1
-20150819-050007: You have entered GPIO 17 Input
-20150819-050007: You have entered raintime period in seconds: 300
-20150819-050007: Raining due to 
-20150819-050507: GPIO Input 17 - STATUS: 1
+20150822-050001: GPIO Input 17 - STATUS: 1
+20150822-050001: GPIO Input 18 - STATUS: 1
+20150822-050001: GPIO Input 27 - STATUS: 1
+20150822-050001: GPIO Input 22 - STATUS: 1
+20150822-050001: GPIO Input 23 - STATUS: 1
+20150822-050001: GPIO Input 24 - STATUS: 1
+20150822-050001: GPIO Input 10 - STATUS: 1
+20150822-050001: GPIO Input 9 - STATUS: 1
+20150822-050001: You have entered GPIO 17 Input
+20150822-050001: You have entered raintime period in seconds: 300
+20150822-050001: Raining due to 
+20150822-050501: GPIO Input 17 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20150822-180001: GPIO Input 17 - STATUS: 1
+20150822-180001: GPIO Input 18 - STATUS: 1
+20150822-180001: GPIO Input 27 - STATUS: 1
+20150822-180001: GPIO Input 22 - STATUS: 1
+20150822-180001: GPIO Input 23 - STATUS: 1
+20150822-180001: GPIO Input 24 - STATUS: 1
+20150822-180001: GPIO Input 10 - STATUS: 1
+20150822-180001: GPIO Input 9 - STATUS: 1
+20150822-180001: You have entered GPIO 17 Input
+20150822-180001: You have entered raintime period in seconds: 420
+20150822-180001: Raining due to 
+20150822-180701: GPIO Input 17 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20150823-050007: GPIO Input 17 - STATUS: 1
+20150823-050007: GPIO Input 18 - STATUS: 0
+20150823-050007: GPIO Input 27 - STATUS: 1
+20150823-050007: GPIO Input 22 - STATUS: 1
+20150823-050007: GPIO Input 23 - STATUS: 1
+20150823-050007: GPIO Input 24 - STATUS: 1
+20150823-050007: GPIO Input 10 - STATUS: 1
+20150823-050007: GPIO Input 9 - STATUS: 1
+20150823-050007: You have entered GPIO 17 Input
+20150823-050007: You have entered raintime period in seconds: 300
+20150823-050007: Raining due to 
+20150823-050507: GPIO Input 17 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20150823-180006: GPIO Input 17 - STATUS: 1
+20150823-180006: GPIO Input 18 - STATUS: 0
+20150823-180006: GPIO Input 27 - STATUS: 1
+20150823-180006: GPIO Input 22 - STATUS: 1
+20150823-180006: GPIO Input 23 - STATUS: 1
+20150823-180006: GPIO Input 24 - STATUS: 1
+20150823-180006: GPIO Input 10 - STATUS: 1
+20150823-180006: GPIO Input 9 - STATUS: 1
+20150823-180006: You have entered GPIO 17 Input
+20150823-180006: You have entered raintime period in seconds: 420
+20150823-180007: Raining due to 
+20150823-180707: GPIO Input 17 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20150824-050001: GPIO Input 17 - STATUS: 1
+20150824-050001: GPIO Input 18 - STATUS: 1
+20150824-050001: GPIO Input 27 - STATUS: 1
+20150824-050001: GPIO Input 22 - STATUS: 1
+20150824-050001: GPIO Input 23 - STATUS: 1
+20150824-050001: GPIO Input 24 - STATUS: 1
+20150824-050001: GPIO Input 10 - STATUS: 1
+20150824-050001: GPIO Input 9 - STATUS: 1
+20150824-050001: You have entered GPIO 17 Input
+20150824-050001: You have entered raintime period in seconds: 300
+20150824-050001: No Raining (var_rain: 0) due to forecasted weather: leichter Regen
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20150824-180006: GPIO Input 17 - STATUS: 1
+20150824-180006: GPIO Input 18 - STATUS: 1
+20150824-180006: GPIO Input 27 - STATUS: 1
+20150824-180006: GPIO Input 22 - STATUS: 1
+20150824-180006: GPIO Input 23 - STATUS: 1
+20150824-180006: GPIO Input 24 - STATUS: 1
+20150824-180006: GPIO Input 10 - STATUS: 1
+20150824-180006: GPIO Input 9 - STATUS: 1
+20150824-180006: You have entered GPIO 17 Input
+20150824-180006: You have entered raintime period in seconds: 420
+20150824-180006: No Raining (var_rain: 0) due to forecasted weather: leichter Regen - Schauer
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20150825-050016: GPIO Input 17 - STATUS: 1
+20150825-050016: GPIO Input 18 - STATUS: 0
+20150825-050016: GPIO Input 27 - STATUS: 1
+20150825-050017: GPIO Input 22 - STATUS: 1
+20150825-050017: GPIO Input 23 - STATUS: 1
+20150825-050017: GPIO Input 24 - STATUS: 1
+20150825-050017: GPIO Input 10 - STATUS: 1
+20150825-050017: GPIO Input 9 - STATUS: 1
+20150825-050017: You have entered GPIO 17 Input
+20150825-050017: You have entered raintime period in seconds: 300
+20150825-050017: Raining due to 
+20150825-050517: GPIO Input 17 - STATUS: 1
 ################################################
 #[END] RAIN SKRIPT
 ################################################

@@ -244,7 +244,7 @@ translate $var_str
 if [ -e $DATEI ]; then
 
 H=$(date +%H)
-if [ 333 -le $H ] && [ $H -lt 11 ]; then 
+if [ 3 -le $H ] && [ $H -lt 11 ]; then 
  #06:00 a.m. weather 
  merge $(sed -n '18{p;q}' $DATEI)
 elif [ 11 -le $H ] && [ $H -lt 17 ]; then 
@@ -292,7 +292,7 @@ fi
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
  /usr/local/bin/gpio -g write $1 0
- echo `date +%Y%m%d-%H%M%S`": Raining due to $var_str_text" >> $LOG
+ echo `date +%Y%m%d-%H%M%S`": Raining due to $var_str_txt" >> $LOG
  #Waiting the entered time period before closing ventile
  sleep $2
 
