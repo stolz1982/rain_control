@@ -11,43 +11,43 @@
     <logo>Download at http://www.wetter.com/api/downloads/#logos</logo>
   </credit>
   <forecast>
-    <date value="2015-08-25">
+    <date value="2015-08-26">
       <w>2</w>
-      <tx>22</tx>
+      <tx>26</tx>
       <time value="06:00">
-        <w>61</w>
-        <tx>19</tx>
-        <tn>16</tn>
+        <w>2</w>
+        <tx>20</tx>
+        <tn>14</tn>
         <p>5</p>
-        <d>1440482400</d>
-        <w_txt>leichter Regen</w_txt>
+        <d>1440568800</d>
+        <w_txt>wolkig</w_txt>
       </time>
       <time value="11:00">
-        <w>80</w>
-        <tx>21</tx>
-        <tn>18</tn>
+        <w>2</w>
+        <tx>25</tx>
+        <tn>20</tn>
         <p>6</p>
-        <d>1440500400</d>
-        <w_txt>leichter Regen - Schauer</w_txt>
+        <d>1440586800</d>
+        <w_txt>wolkig</w_txt>
       </time>
       <time value="17:00">
         <w>2</w>
-        <tx>22</tx>
-        <tn>17</tn>
+        <tx>26</tx>
+        <tn>20</tn>
         <p>6</p>
-        <d>1440522000</d>
+        <d>1440608400</d>
         <w_txt>wolkig</w_txt>
       </time>
       <time value="23:00">
         <w>2</w>
-        <tx>17</tx>
-        <tn>15</tn>
+        <tx>20</tx>
+        <tn>18</tn>
         <p>6</p>
-        <d>1440543600</d>
+        <d>1440630000</d>
         <w_txt>wolkig</w_txt>
       </time>
-      <d>1440482400</d>
-      <tn>16</tn>
+      <d>1440568800</d>
+      <tn>14</tn>
       <p>24</p>
       <w_txt>wolkig</w_txt>
     </date>

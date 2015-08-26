@@ -46,6 +46,7 @@ var_str=${var_str%<*}
 
 translate () {
 var_str_txt=""
+var_input_str=""
 var_rain=0  #beduetet keine Beregnung
 case $1 in
 0)
@@ -233,6 +234,7 @@ case $1 in
   var_rain=0
   ;;
 esac
+var_input_str=$1
 }
 
 merge () {
@@ -301,7 +303,7 @@ if [ $var_rain -eq 1 ]; then
 
  echo `date +%Y%m%d-%H%M%S`": GPIO Input $1 - STATUS: $(/usr/local/bin/gpio -g read $1)" >> $LOG
 else
- echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain) due to forecasted weather: $var_str_txt" >> $LOG
+ echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
 fi
 
 #Script End
