@@ -17,9 +17,20 @@
 #######################################################
 #
 # GPIO Inputs and related Ventiles locations
-# 17 = in front of the house
-# 18 = the path to the garage (beside the house)
+# 17 = in front of the house and path to the garage
+# 18 = flowers bed beyond the house
+# 27 = first part of the mid field
+# 22 = upper right part of the mid field
+# 23 = upper left part of the mid field
 #
+#######################################################
+
+#######################################################
+#
+# Input parameters
+# 1 = GPIO Input
+# 2 = time of rain duration in seconds
+# 3 = considering weather forecast (1=yes 0=no)
 #
 #######################################################
 
@@ -266,10 +277,10 @@ echo "################################################" >> $LOG
 echo "#[START] RAIN SKRIPT" >> $LOG
 echo "################################################" >> $LOG
 
-#Turn of all connected GPIOS (in total 8 because of I am using an 8 channel relay)
+#Turn off all connected GPIOS (in total 8 because of I am using an 8 channel relay)
 for i in 17 18 27 22 23 24 10 9
 do
- gpio -g write $i 1
+/usr/local/bin/gpio export $i out && /usr/local/bin/gpio -g write $i 1
 now=`date +%Y%m%d-%H%M%S`
 echo $now": GPIO Input $i - STATUS: $(/usr/local/bin/gpio -g read $i)" >> $LOG
 done
@@ -291,11 +302,20 @@ if [ -n "$2" ]
      exit 2
 fi
 
+if [ $3 -eq 0 ]
+    then   
+      echo `date +%Y%m%d-%H%M%S`": weather forecast will not be considered: $3 and variable var_rain will be set to 1" >> $LOG
+      #not considering weather forecast just sets variable var_rain to 1 (open) 
+      var_rain=1
+    else
+     echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: $3" >> $LOG
+fi
+
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
- /usr/local/bin/gpio -g write $1 0
- echo `date +%Y%m%d-%H%M%S`": Raining due to $var_str_txt" >> $LOG
- #Waiting the entered time period before closing ventile
+/usr/local/bin/gpio -g write $1 0
+echo `date +%Y%m%d-%H%M%S`": Raining due to $var_str_txt" >> $LOG
+#Waiting the entered time period before closing ventile
  sleep $2
 
  #Turn off GPIO Input
