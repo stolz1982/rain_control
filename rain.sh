@@ -287,7 +287,8 @@ fi
 # 4th parameter ($4 = 1 --> just store and exist, else store and continue)
 
 #building weather forecast history
-#mysql -u root -p -D home -e "insert into wetterbericht set wetter_beschreibung = 'scheiss wetter test tetstte wtewewerwerew', temperatur=1001.6,beregnung=0;"
+#hier wird es fortgestzt
+#mysql -h 192.168.2.202 -u temperatur -ptemperatur -D home -e "insert into wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur=1001.6,beregnung=0;"
 if [ $? -ne 0 ]; then
 exit 1
 fi
