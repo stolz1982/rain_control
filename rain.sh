@@ -31,6 +31,16 @@
 # 1 = GPIO Input
 # 2 = time of rain duration in seconds
 # 3 = considering weather forecast (1=yes 0=no)
+# 4 = building weatherforecast history (1= just build history and exist, else build history and contiune script)
+#
+#######################################################
+
+#######################################################
+#
+# exit codes
+# 0 = as usuaul everything is fine
+# 99 = everthing is fine and just build the weather forecast history
+# 1 = check
 #
 #######################################################
 
@@ -270,6 +280,21 @@ else
  #11 p.m.
  merge $(sed -n '42{p;q}' $DATEI)
 fi
+fi
+
+#here starts the db writing history function if the 4. parameter equals 1 it means the script should just 
+# store the weather forecast data (pls see on top the parameter description) 
+# 4th parameter ($4 = 1 --> just store and exist, else store and continue)
+
+#building weather forecast history
+#mysql -u root -p -D home -e "insert into wetterbericht set wetter_beschreibung = 'scheiss wetter test tetstte wtewewerwerew', temperatur=1001.6,beregnung=0;"
+if [ $? -ne 0 ]; then
+exit 1
+fi
+
+if [ $4 -eq 1 ]; then
+#error codes you can find on top
+exit 99
 fi
 
 #Script Start
