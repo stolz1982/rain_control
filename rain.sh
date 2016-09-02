@@ -31,7 +31,7 @@
 # 1 = GPIO Input
 # 2 = time of rain duration in seconds
 # 3 = considering weather forecast (1=yes 0=no)
-# 4 = building weatherforecast history (1= just build history and exist, else build history and contiune script)
+# 4 = building weatherforecast history in DB (1= just build history and exit, else build history and contiune script)
 #
 #######################################################
 
@@ -49,10 +49,11 @@ LOG="/home/user01/skript/rain_control/RAIN_$1.log"
 ERR="/home/user01/skript/rain_control/RAIN_$1.err"
 DATEI="/home/user01/skript/rain_control/WEATHER.DAT"
 FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
+DB_SERVER_IP="192.168.2.202"
+DB_USER="temperatur"
 
 #Initial deleting Files
 rm -f $ERR
-rm -f $FC_FILE
 rm -f $DATEI
 
 #Getting weather forecast data for my hometown
@@ -65,6 +66,8 @@ var_str=${var_str#*>}
 var_str=${var_str%<*}
 }
 
+#translate is a function to define whether or not raining will take place which depends on
+#on weathercode. provided by a list from wetter.com 
 translate () {
 var_str_txt=""
 var_input_str=""
@@ -282,13 +285,14 @@ else
 fi
 fi
 
-#here starts the db writing history function if the 4. parameter equals 1 it means the script should just 
+#here starts the db writing history function, if the 4. parameter equal 1, it means the script should just 
 # store the weather forecast data (pls see on top the parameter description) 
-# 4th parameter ($4 = 1 --> just store and exist, else store and continue)
+# 4th parameter ($4 = 1 --> just store and exit, else store and continue)
 
 #building weather forecast history
 #hier wird es fortgestzt
-#mysql -h 192.168.2.202 -u temperatur -ptemperatur -D home -e "insert into wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur=1001.6,beregnung=0;"
+mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur=0,beregnung=$var_rain;"
+
 if [ $? -ne 0 ]; then
 exit 1
 fi
@@ -336,6 +340,10 @@ if [ $3 -eq 0 ]
     else
      echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: $3" >> $LOG
 fi
+
+#rewieng weatherdata for last 4 hours, if the avg of raining is = 1 then script will continue 
+#here you can continue
+
 
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
