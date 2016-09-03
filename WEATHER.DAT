@@ -11,45 +11,45 @@
     <logo>Download at http://www.wetter.com/api/downloads/#logos</logo>
   </credit>
   <forecast>
-    <date value="2016-08-28">
-      <w>0</w>
-      <tx>32</tx>
+    <date value="2016-09-03">
+      <w>1</w>
+      <tx>24</tx>
       <time value="06:00">
-        <w>0</w>
-        <tx>27</tx>
-        <tn>18</tn>
+        <w>1</w>
+        <tx>20</tx>
+        <tn>15</tn>
         <p>5</p>
-        <d>1472364000</d>
-        <w_txt>sonnig</w_txt>
+        <d>1472882400</d>
+        <w_txt>leicht bewölkt</w_txt>
       </time>
       <time value="11:00">
-        <w>0</w>
-        <tx>32</tx>
-        <tn>27</tn>
+        <w>1</w>
+        <tx>24</tx>
+        <tn>20</tn>
         <p>6</p>
-        <d>1472382000</d>
-        <w_txt>sonnig</w_txt>
+        <d>1472900400</d>
+        <w_txt>leicht bewölkt</w_txt>
       </time>
       <time value="17:00">
         <w>1</w>
-        <tx>31</tx>
-        <tn>23</tn>
+        <tx>24</tx>
+        <tn>19</tn>
         <p>6</p>
-        <d>1472403600</d>
+        <d>1472922000</d>
         <w_txt>leicht bewölkt</w_txt>
       </time>
       <time value="23:00">
-        <w>61</w>
-        <tx>23</tx>
-        <tn>19</tn>
+        <w>1</w>
+        <tx>19</tx>
+        <tn>17</tn>
         <p>6</p>
-        <d>1472425200</d>
-        <w_txt>leichter Regen</w_txt>
+        <d>1472943600</d>
+        <w_txt>leicht bewölkt</w_txt>
       </time>
-      <d>1472364000</d>
-      <tn>18</tn>
+      <d>1472882400</d>
+      <tn>15</tn>
       <p>24</p>
-      <w_txt>sonnig</w_txt>
+      <w_txt>leicht bewölkt</w_txt>
     </date>
   </forecast>
 </city>

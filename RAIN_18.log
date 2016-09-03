@@ -2694,3 +2694,60 @@
 ################################################
 #[END] RAIN SKRIPT
 ################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160829-181002: GPIO Input 17 - STATUS: 1
+20160829-181002: GPIO Input 18 - STATUS: 1
+20160829-181002: GPIO Input 27 - STATUS: 1
+20160829-181002: GPIO Input 22 - STATUS: 1
+20160829-181002: GPIO Input 23 - STATUS: 1
+20160829-181002: GPIO Input 24 - STATUS: 1
+20160829-181002: GPIO Input 10 - STATUS: 1
+20160829-181002: GPIO Input 9 - STATUS: 1
+20160829-181002: You have entered GPIO 18 Input
+20160829-181002: You have entered raintime period in seconds: 599
+20160829-181002: weather forecast will be considered: 
+20160829-181002: Raining due to leicht bewoelkt
+20160829-182001: GPIO Input 18 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160831-181002: GPIO Input 17 - STATUS: 1
+20160831-181002: GPIO Input 18 - STATUS: 1
+20160831-181002: GPIO Input 27 - STATUS: 1
+20160831-181002: GPIO Input 22 - STATUS: 1
+20160831-181002: GPIO Input 23 - STATUS: 1
+20160831-181002: GPIO Input 24 - STATUS: 1
+20160831-181002: GPIO Input 10 - STATUS: 1
+20160831-181002: GPIO Input 9 - STATUS: 1
+20160831-181002: You have entered GPIO 18 Input
+20160831-181002: You have entered raintime period in seconds: 599
+20160831-181002: weather forecast will be considered: 
+20160831-181002: Raining due to sonnig
+20160831-182001: GPIO Input 18 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160901-181001: GPIO Input 17 - STATUS: 1
+20160901-181001: GPIO Input 18 - STATUS: 1
+20160901-181001: GPIO Input 27 - STATUS: 1
+20160901-181001: GPIO Input 22 - STATUS: 1
+20160901-181001: GPIO Input 23 - STATUS: 1
+20160901-181001: GPIO Input 24 - STATUS: 1
+20160901-181001: GPIO Input 10 - STATUS: 1
+20160901-181001: GPIO Input 9 - STATUS: 1
+20160901-181001: You have entered GPIO 18 Input
+20160901-181001: You have entered raintime period in seconds: 599
+20160901-181001: weather forecast will be considered: 
+20160901-181001: Raining due to leicht bewoelkt
+20160901-182000: GPIO Input 18 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
