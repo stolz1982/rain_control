@@ -343,7 +343,7 @@ fi
 
 #rewieng weatherdata for last 4 hours, if the avg of raining is = 1 then script will continue 
 #here you can continue
-
+#select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);
 
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
