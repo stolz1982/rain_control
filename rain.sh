@@ -278,6 +278,7 @@ if [ 3 -le $H ] && [ $H -lt 11 ]; then
  #06:00 a.m. weather 
  merge $(sed -n '18{p;q}' $DATEI)
  #here we will continue with getting temp data
+ #we have to figure out the xml file
 elif [ 11 -le $H ] && [ $H -lt 17 ]; then 
  #11:00 a.m.
  merge $(sed -n '26{p;q}' $DATEI)
