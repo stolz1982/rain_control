@@ -6227,3 +6227,89 @@
 ################################################
 #[END] RAIN SKRIPT
 ################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160904-134315: GPIO Input 17 - STATUS: 1
+20160904-134315: GPIO Input 18 - STATUS: 1
+20160904-134315: GPIO Input 27 - STATUS: 1
+20160904-134315: GPIO Input 22 - STATUS: 1
+20160904-134315: GPIO Input 23 - STATUS: 1
+20160904-134315: GPIO Input 24 - STATUS: 1
+20160904-134315: GPIO Input 10 - STATUS: 1
+20160904-134315: GPIO Input 9 - STATUS: 1
+20160904-134315: You have entered GPIO 27 Input
+20160904-134315: You have entered raintime period in seconds: 1
+20160904-134315: weather forecast will not be considered: 0 and variable var_rain will be set to 1
+20160904-134315: Raining will start - forecasted weather: )t
+20160904-134316: GPIO Input 27 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160904-134335: GPIO Input 17 - STATUS: 1
+20160904-134335: GPIO Input 18 - STATUS: 1
+20160904-134335: GPIO Input 27 - STATUS: 1
+20160904-134336: GPIO Input 22 - STATUS: 1
+20160904-134336: GPIO Input 23 - STATUS: 1
+20160904-134336: GPIO Input 24 - STATUS: 1
+20160904-134336: GPIO Input 10 - STATUS: 1
+20160904-134336: GPIO Input 9 - STATUS: 1
+20160904-134336: You have entered GPIO 27 Input
+20160904-134336: You have entered raintime period in seconds: 1
+20160904-134336: weather forecast will be considered: 1
+20160904-134336: No raining due to a lot of rain within last 8 hours: 0
+20160904-134336: Script exit with code 100
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160904-134533: GPIO Input 17 - STATUS: 1
+20160904-134533: GPIO Input 18 - STATUS: 1
+20160904-134533: GPIO Input 27 - STATUS: 1
+20160904-134533: GPIO Input 22 - STATUS: 1
+20160904-134533: GPIO Input 23 - STATUS: 1
+20160904-134533: GPIO Input 24 - STATUS: 1
+20160904-134534: GPIO Input 10 - STATUS: 1
+20160904-134534: GPIO Input 9 - STATUS: 1
+20160904-134534: You have entered GPIO 27 Input
+20160904-134534: You have entered raintime period in seconds: 1
+20160904-134534: weather forecast will not be considered: 0 and variable var_rain will be set to 1
+20160904-134534: Raining will start - forecasted weather: leichter Regen
+20160904-134535: GPIO Input 27 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160904-134548: GPIO Input 17 - STATUS: 1
+20160904-134548: GPIO Input 18 - STATUS: 1
+20160904-134548: GPIO Input 27 - STATUS: 1
+20160904-134548: GPIO Input 22 - STATUS: 1
+20160904-134548: GPIO Input 23 - STATUS: 1
+20160904-134548: GPIO Input 24 - STATUS: 1
+20160904-134548: GPIO Input 10 - STATUS: 1
+20160904-134548: GPIO Input 9 - STATUS: 1
+20160904-134548: You have entered GPIO 27 Input
+20160904-134548: You have entered raintime period in seconds: 1
+20160904-134548: weather forecast will be considered: 1
+20160904-134548: No raining due to temperatur less than 16 degrees: 20
+20160904-134548: Script exit with code 101
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160904-134811: GPIO Input 17 - STATUS: 1
+20160904-134811: GPIO Input 18 - STATUS: 1
+20160904-134811: GPIO Input 27 - STATUS: 1
+20160904-134811: GPIO Input 22 - STATUS: 1
+20160904-134811: GPIO Input 23 - STATUS: 1
+20160904-134811: GPIO Input 24 - STATUS: 1
+20160904-134811: GPIO Input 10 - STATUS: 1
+20160904-134811: GPIO Input 9 - STATUS: 1
+20160904-134811: You have entered GPIO 27 Input
+20160904-134811: You have entered raintime period in seconds: 1
+20160904-134811: weather forecast will be considered: 1
+20160904-134811: No raining due to temperatur less than 51  degrees: 20
+20160904-134811: Script exit with code 101

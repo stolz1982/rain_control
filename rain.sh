@@ -53,6 +53,7 @@ DATEI="/home/user01/skript/rain_control/WEATHER.DAT"
 FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
 DB_SERVER_IP="192.168.2.202"
 DB_USER="temperatur"
+BREAK_TEMP="15"
 
 #Initial deleting Files
 rm -f $ERR
@@ -366,8 +367,8 @@ if [ $3 -eq 0 ]
 		exit 100
 	fi
 	
-	if [ $max_temp -lt 50 ]; then
-		echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than 16 degrees: $max_temp" >> $LOG
+	if [ $max_temp -lt $BREAK_TEMP ]; then
+		echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than $BREAK_TEMP  degrees: $max_temp" >> $LOG
 		echo `date +%Y%m%d-%H%M%S`": Script exit with code 101" >> $LOG
 		exit 101
 	fi
@@ -376,7 +377,7 @@ fi
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
 /usr/local/bin/gpio -g write $1 0
-echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_tx)t" >> $LOG
+echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
 #Waiting the entered time period before closing ventile
  sleep $2
 
