@@ -39,9 +39,10 @@
 #
 # exit codes
 # 0 = as usuaul everything is fine
+# 1 = check
 # 99 = everthing is fine and just build the weather forecast history
 # 100 = no raining due to a lot of rain within the last 8 hours
-# 1 = check
+# 101 = no raining due to maximum forecast temperature of less than 16 degrees
 #
 #######################################################
 
@@ -356,24 +357,26 @@ if [ $3 -eq 0 ]
       var_rain=1
     else
      echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: $3" >> $LOG
-fi
+	#reviewing weatherdata for last 8 hours, if the avg of raining is = 1 then script will continue 
+	rain_avg=$(mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -se "select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
 
-#reviewing weatherdata for last 8 hours, if the avg of raining is = 1 then script will continue 
-rain_avg=$(mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -se "select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
-
-if [ $rain_avg -lt 1 ]; then
-	echo `date +%Y%m%d-%H%M%S`": No raining due to a lot of rain within last 8 hours: $rain_avg" >> $LOG
-	echo `date +%Y%m%d-%H%M%S`": Script exit with code 100" >> $LOG
-	exit 100
+	if [ $rain_avg -lt 1 ]; then
+		echo `date +%Y%m%d-%H%M%S`": No raining due to a lot of rain within last 8 hours: $rain_avg" >> $LOG
+		echo `date +%Y%m%d-%H%M%S`": Script exit with code 100" >> $LOG
+		exit 100
+	fi
+	
+	if [ $max_temp -lt 50 ]; then
+		echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than 16 degrees: $max_temp" >> $LOG
+		echo `date +%Y%m%d-%H%M%S`": Script exit with code 101" >> $LOG
+		exit 101
+	fi
 fi
-#rewieng weatherdata for last 4 hours, if the avg of raining is = 1 then script will continue 
-#here you can continue
-#select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);
 
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
 /usr/local/bin/gpio -g write $1 0
-echo `date +%Y%m%d-%H%M%S`": Raining due to $var_str_txt" >> $LOG
+echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_tx)t" >> $LOG
 #Waiting the entered time period before closing ventile
  sleep $2
 

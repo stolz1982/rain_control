@@ -6208,3 +6208,22 @@
 ################################################
 #[END] RAIN SKRIPT
 ################################################
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160904-133325: GPIO Input 17 - STATUS: 1
+20160904-133325: GPIO Input 18 - STATUS: 1
+20160904-133325: GPIO Input 27 - STATUS: 1
+20160904-133325: GPIO Input 22 - STATUS: 1
+20160904-133325: GPIO Input 23 - STATUS: 1
+20160904-133325: GPIO Input 24 - STATUS: 1
+20160904-133325: GPIO Input 10 - STATUS: 1
+20160904-133325: GPIO Input 9 - STATUS: 1
+20160904-133325: You have entered GPIO 27 Input
+20160904-133325: You have entered raintime period in seconds: 1
+20160904-133325: weather forecast will not be considered: 0 and variable var_rain will be set to 1
+20160904-133325: Raining due to leichter Regen
+20160904-133326: GPIO Input 27 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
