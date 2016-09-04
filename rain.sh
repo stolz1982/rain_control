@@ -28,6 +28,10 @@
 #######################################################
 #
 # Input parameters
+# -V|--ventile = ventile which is the gpio port and the time of raining (needs required gpio port# and period of time for raining)
+# -f|--noforecast = forecast will be not considered, CONSIDERING_WEATHERFORECAST=0
+# -h|--history-only = execute just the sql commnad in order to build the history, WEATHER_HISTORY_ONLY=1
+# 
 # 1 = GPIO Input
 # 2 = time of rain duration in seconds
 # 3 = considering weather forecast (1=yes 0=no)
@@ -46,6 +50,12 @@
 #
 #######################################################
 
+
+# Read the options
+TEMP=`getopt -o fHV:: --long ventile::,noforecast,history-only -n 'rain_getopt.sh' -- "$@"`
+eval set -- "$TEMP"
+
+
 #DEFINITION VARIABLES
 LOG="/home/user01/skript/rain_control/RAIN_$1.log"
 ERR="/home/user01/skript/rain_control/RAIN_$1.err"
@@ -54,6 +64,9 @@ FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad9
 DB_SERVER_IP="192.168.2.202"
 DB_USER="temperatur"
 BREAK_TEMP="15"
+CONSIDERING_WEATHERFORECAST=1
+WEATHER_HISTORY_ONLY=0
+
 
 #Initial deleting Files
 rm -f $ERR
