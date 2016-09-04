@@ -31,6 +31,16 @@
 # 1 = GPIO Input
 # 2 = time of rain duration in seconds
 # 3 = considering weather forecast (1=yes 0=no)
+# 4 = building weatherforecast history in DB (1= just build history and exit, else build history and contiune script)
+#
+#######################################################
+
+#######################################################
+#
+# exit codes
+# 0 = as usuaul everything is fine
+# 99 = everthing is fine and just build the weather forecast history
+# 100 = no raining due to a lot of rain within the last 8 hours
 #
 #######################################################
 
@@ -39,10 +49,11 @@ LOG="/home/user01/skript/rain_control/RAIN_$1.log"
 ERR="/home/user01/skript/rain_control/RAIN_$1.err"
 DATEI="/home/user01/skript/rain_control/WEATHER.DAT"
 FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
+DB_SERVER_IP="192.168.2.202"
+DB_USER="temperatur"
 
 #Initial deleting Files
 rm -f $ERR
-rm -f $FC_FILE
 rm -f $DATEI
 
 #Getting weather forecast data for my hometown
@@ -55,6 +66,8 @@ var_str=${var_str#*>}
 var_str=${var_str%<*}
 }
 
+#translate is a function to define whether or not raining will take place which depends on
+#on weathercode. provided by a list from wetter.com 
 translate () {
 var_str_txt=""
 var_input_str=""
@@ -272,6 +285,23 @@ else
 fi
 fi
 
+#here starts the db writing history function, if the 4. parameter equal 1, it means the script should just 
+# store the weather forecast data (pls see on top the parameter description) 
+# 4th parameter ($4 = 1 --> just store and exit, else store and continue)
+
+#building weather forecast history
+#hier wird es fortgestzt
+mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur=0,beregnung=$var_rain;"
+
+if [ $? -ne 0 ]; then
+exit 1
+fi
+
+if [ $4 -eq 1 ]; then
+#error codes you can find on top
+exit 99
+fi
+
 #Script Start
 echo "################################################" >> $LOG
 echo "#[START] RAIN SKRIPT" >> $LOG
@@ -309,6 +339,15 @@ if [ $3 -eq 0 ]
       var_rain=1
     else
      echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: $3" >> $LOG
+fi
+
+#reviewing weatherdata for last 8 hours, if the avg of raining is = 1 then script will continue 
+rain_avg=$(mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -se "select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
+
+if [ $rain_avg -lt 1 ]; then
+	echo `date +%Y%m%d-%H%M%S`": No raining due to a lot of rain within last 8 hours: $rain_avg" >> $LOG
+	echo `date +%Y%m%d-%H%M%S`": Script exit with code 100" >> $LOG
+	exit 100
 fi
 
 if [ $var_rain -eq 1 ]; then
