@@ -301,8 +301,7 @@ else
  min_temp=$var_str
 fi
 fi
-echo $max_temp
-echo $min_temp
+
 #here starts the db writing history function, if the 4. parameter equal 1, it means the script should just 
 # store the weather forecast data (pls see on top the parameter description) 
 # 4th parameter ($4 = 1 --> just store and exit, else store and continue)
