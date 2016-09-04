@@ -40,11 +40,8 @@
 # exit codes
 # 0 = as usuaul everything is fine
 # 99 = everthing is fine and just build the weather forecast history
-<<<<<<< HEAD
 # 100 = no raining due to a lot of rain within the last 8 hours
-=======
 # 1 = check
->>>>>>> 7cd2b6ac31ba1f7c0e2fe84b9b1699f555eb03bf
 #
 #######################################################
 
@@ -277,27 +274,42 @@ H=$(date +%H)
 if [ 3 -le $H ] && [ $H -lt 11 ]; then 
  #06:00 a.m. weather 
  merge $(sed -n '18{p;q}' $DATEI)
- #here we will continue with getting temp data
- #we have to figure out the xml file
+ clean $(sed -n '19{p;q}' $DATEI)
+ max_temp=$var_str
+ clean $(sed -n '20{p;q}' $DATEI)
+ min_temp=$var_str
 elif [ 11 -le $H ] && [ $H -lt 17 ]; then 
  #11:00 a.m.
  merge $(sed -n '26{p;q}' $DATEI)
+ clean $(sed -n '27{p;q}' $DATEI)
+ max_temp=$var_str
+ clean $(sed -n '28{p;q}' $DATEI)
+ min_temp=$var_str
 elif [ 17 -le $H ] && [ $H -lt 23 ]; then
  #5 p.m.
  merge $(sed -n '34{p;q}' $DATEI)
+ clean $(sed -n '35{p;q}' $DATEI)
+ max_temp=$var_str
+ clean $(sed -n '36{p;q}' $DATEI)
+ min_temp=$var_str
 else
  #11 p.m.
  merge $(sed -n '42{p;q}' $DATEI)
+ clean $(sed -n '43{p;q}' $DATEI)
+ max_temp=$var_str
+ clean $(sed -n '44{p;q}' $DATEI)
+ min_temp=$var_str
 fi
 fi
-
+echo $max_temp
+echo $min_temp
 #here starts the db writing history function, if the 4. parameter equal 1, it means the script should just 
 # store the weather forecast data (pls see on top the parameter description) 
 # 4th parameter ($4 = 1 --> just store and exit, else store and continue)
 
 #building weather forecast history
 #hier wird es fortgestzt
-mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur=0,beregnung=$var_rain;"
+mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min=$min_temp,temperatur_max=$max_temp,beregnung=$var_rain;"
 
 if [ $? -ne 0 ]; then
 exit 1
