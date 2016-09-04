@@ -40,7 +40,11 @@
 # exit codes
 # 0 = as usuaul everything is fine
 # 99 = everthing is fine and just build the weather forecast history
+<<<<<<< HEAD
 # 100 = no raining due to a lot of rain within the last 8 hours
+=======
+# 1 = check
+>>>>>>> 7cd2b6ac31ba1f7c0e2fe84b9b1699f555eb03bf
 #
 #######################################################
 
@@ -341,6 +345,7 @@ if [ $3 -eq 0 ]
      echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: $3" >> $LOG
 fi
 
+<<<<<<< HEAD
 #reviewing weatherdata for last 8 hours, if the avg of raining is = 1 then script will continue 
 rain_avg=$(mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -se "select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
 
@@ -349,6 +354,11 @@ if [ $rain_avg -lt 1 ]; then
 	echo `date +%Y%m%d-%H%M%S`": Script exit with code 100" >> $LOG
 	exit 100
 fi
+=======
+#rewieng weatherdata for last 4 hours, if the avg of raining is = 1 then script will continue 
+#here you can continue
+#select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);
+>>>>>>> 7cd2b6ac31ba1f7c0e2fe84b9b1699f555eb03bf
 
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile

@@ -1,8 +1,0 @@
-#http://rogerdudler.github.io/git-guide/ --> good one
-#sudo apt-get install git #im Verzeichnis vom RAIN lokal wechselen
-#git init 
-#git clone https://github.com/stolz1982/rain_control.git
-#git add <Filename> or git add *
-#git commit -m "Commit message"
-#git push origin master
-#git pull origin master
