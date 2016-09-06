@@ -6313,3 +6313,38 @@
 20160904-134811: weather forecast will be considered: 1
 20160904-134811: No raining due to temperatur less than 51  degrees: 20
 20160904-134811: Script exit with code 101
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160904-202501: GPIO Input 17 - STATUS: 1
+20160904-202501: GPIO Input 18 - STATUS: 1
+20160904-202501: GPIO Input 27 - STATUS: 1
+20160904-202501: GPIO Input 22 - STATUS: 1
+20160904-202501: GPIO Input 23 - STATUS: 1
+20160904-202501: GPIO Input 24 - STATUS: 1
+20160904-202501: GPIO Input 10 - STATUS: 1
+20160904-202501: GPIO Input 9 - STATUS: 1
+20160904-202501: You have entered GPIO 27 Input
+20160904-202501: You have entered raintime period in seconds: 299
+20160904-202501: weather forecast will be considered: 
+20160904-202501: No raining due to a lot of rain within last 8 hours: 0
+20160904-202501: Script exit with code 100
+################################################
+#[START] RAIN SKRIPT
+################################################
+20160905-202501: GPIO Input 17 - STATUS: 1
+20160905-202501: GPIO Input 18 - STATUS: 1
+20160905-202501: GPIO Input 27 - STATUS: 1
+20160905-202501: GPIO Input 22 - STATUS: 1
+20160905-202501: GPIO Input 23 - STATUS: 1
+20160905-202501: GPIO Input 24 - STATUS: 1
+20160905-202501: GPIO Input 10 - STATUS: 1
+20160905-202501: GPIO Input 9 - STATUS: 1
+20160905-202501: You have entered GPIO 27 Input
+20160905-202501: You have entered raintime period in seconds: 299
+20160905-202501: weather forecast will be considered: 
+20160905-202501: Raining will start - forecasted weather: leicht bewoelkt
+20160905-203000: GPIO Input 27 - STATUS: 1
+################################################
+#[END] RAIN SKRIPT
+################################################
