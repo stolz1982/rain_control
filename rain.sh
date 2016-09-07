@@ -28,7 +28,8 @@
 #######################################################
 #
 # Input parameters
-# -V|--ventile = ventile which is the gpio port and the time of raining (needs required gpio port# and period of time for raining)
+# -V|--ventile = ventile which is the gpio port
+# -t|--time = the time of raining period
 # -f|--noforecast = forecast will be not considered, CONSIDERING_WEATHERFORECAST=0
 # -h|--history-only = execute just the sql commnad in order to build the history, WEATHER_HISTORY_ONLY=1
 # 
@@ -50,12 +51,6 @@
 #
 #######################################################
 
-
-# Read the options
-TEMP=`getopt -o fHV:: --long ventile::,noforecast,history-only -n 'rain_getopt.sh' -- "$@"`
-eval set -- "$TEMP"
-
-
 #DEFINITION VARIABLES
 LOG="/home/user01/skript/rain_control/RAIN_$1.log"
 ERR="/home/user01/skript/rain_control/RAIN_$1.err"
@@ -67,6 +62,35 @@ BREAK_TEMP="15"
 CONSIDERING_WEATHERFORECAST=1
 WEATHER_HISTORY_ONLY=0
 
+# Read the options
+TEMP=`getopt -o nhV:t: --long ventile:,noforecast,historyonly,time: -n 'rain_getopt.sh' -- "$@"`
+eval set -- "$TEMP"
+
+# extract options and their arguments into variables.
+ while true ; do
+    case "$1" in
+        -n|--noforecast) CONSIDERING_WEATHERFORECAST=0 ; shift ;;
+        -h|--historyonly) WEATHER_HISTORY_ONLY=1 ; shift ;;
+        -V|--ventile)
+            case "$2" in
+                "") shift 2 ;;
+                *) GPIO=$2 ; shift 2 ;;
+            esac ;;
+	-t|--time)
+            case "$2" in
+                "") shift 2 ;;
+                *) RAIN_PERIODE=$2 ; shift 2 ;;
+            esac ;;
+	--) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
+ done
+echo $CONSIDERING_WEATHERFORECAST
+echo $WEATHER_HISTORY_ONLY
+echo $GPIO
+echo $RAIN_PERIODE
+
+exit 1000
 
 #Initial deleting Files
 rm -f $ERR
