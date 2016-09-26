@@ -62,7 +62,7 @@ eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
  while true ; do
-    case "$GPIO" in
+    case "$1" in
         -n|--noforecast) CONSIDERING_WEATHERFORECAST=0 ; shift ;;
         -h|--historyonly) WEATHER_HISTORY_ONLY=1 ; shift ;;
         -V|--ventile)
@@ -333,13 +333,20 @@ else
 fi
 fi
 
-#here starts the db writing history function, if the 4. parameter equal 1, it means the script should just 
+#check if temperatures are zero/empty otherwise mysql brings an error
+if [ -z $min_temp ] || [ ! "$min_temp" ]; then
+min_temp=-99
+fi
+
+if [ -z $max_temp ] || [ ! "$max_temp" ]; then
+max_temp=-99
+fi
+
+#here starts the db writing history function 
 # store the weather forecast data (pls see on top the parameter description) 
-# 4th parameter ($4 = 1 --> just store and exit, else store and continue)
 
 #building weather forecast history
-#hier wird es fortgestzt
-mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min=$min_temp,temperatur_max=$max_temp,beregnung=$var_rain;"
+mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
 
 if [ $? -ne 0 ]; then
 exit 1
@@ -408,13 +415,13 @@ if [ $var_rain -eq 1 ]; then
 /usr/local/bin/gpio -g write $GPIO 0
 echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
 #Waiting the entered time period before closing ventile
- sleep $2
+ sleep $RAIN_PERIODE 
 
  #Turn off GPIO Input
  /usr/local/bin/gpio -g write $GPIO 1
 
  echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $(/usr/local/bin/gpio -g read $GPIO)" >> $LOG
-ele
+else
  echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
 fi
 
