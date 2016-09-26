@@ -28,11 +28,11 @@
 #######################################################
 #
 # Input parameters
-# 1 = GPIO Input
-# 2 = time of rain duration in seconds
-# 3 = considering weather forecast (1=yes 0=no)
-# 4 = building weatherforecast history in DB (1= just build history and exit, else build history and contiune script)
-#
+# -V|--ventile = ventile which is the gpio port
+# -t|--time = the time of raining period
+# -f|--noforecast = forecast will be not considered, CONSIDERING_WEATHERFORECAST=0
+# -h|--history-only = execute just the sql commnad in order to build the history, WEATHER_HISTORY_ONLY=1
+# 
 #######################################################
 
 #######################################################
@@ -47,24 +47,53 @@
 #######################################################
 
 #DEFINITION VARIABLES
-LOG="/home/user01/skript/rain_control/RAIN_$1.log"
-ERR="/home/user01/skript/rain_control/RAIN_$1.err"
-DATEI="/home/user01/skript/rain_control/WEATHER.DAT"
+WORK_DIR="/home/user01/skript/rain_control"
+FORECAST_FILE="$WORK_DIR/WEATHER.DAT"
 FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
 DB_SERVER_IP="192.168.2.202"
 DB_USER="temperatur"
 BREAK_TEMP="15"
+CONSIDERING_WEATHERFORECAST=1
+WEATHER_HISTORY_ONLY=0
+
+# Read the options
+TEMP=`getopt -o nhV:t: --long ventile:,noforecast,historyonly,time: -n 'rain_getopt.sh' -- "$@"`
+eval set -- "$TEMP"
+
+# extract options and their arguments into variables.
+ while true ; do
+    case "$GPIO" in
+        -n|--noforecast) CONSIDERING_WEATHERFORECAST=0 ; shift ;;
+        -h|--historyonly) WEATHER_HISTORY_ONLY=1 ; shift ;;
+        -V|--ventile)
+            case "$2" in
+                "") shift 2 ;;
+                *) GPIO=$2 ; shift 2 ;;
+            esac ;;
+	-t|--time)
+            case "$2" in
+                "") shift 2 ;;
+                *) RAIN_PERIODE=$2 ; shift 2 ;;
+            esac ;;
+	--) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
+ done
+
+#further variables definition based on input parameters
+LOG="$WORK_DIR/RAIN_$GPIO.log"
+ERR="$WORK_DIR/RAIN_$GPIO.err"
 
 #Initial deleting Files
 rm -f $ERR
-rm -f $DATEI
+rm -f $FORECAST_FILE
 
 #Getting weather forecast data for my hometown
-wget $FC -O $DATEI 1>/dev/null 2>&1
+wget $FC -O $FORECAST_FILE 1>/dev/null 2>&1
 
 #Functions for string processing
 clean () {
-var_str=$1
+var_str=$GPIO
 var_str=${var_str#*>}
 var_str=${var_str%<*}
 }
@@ -75,7 +104,7 @@ translate () {
 var_str_txt=""
 var_input_str=""
 var_rain=0  #beduetet keine Beregnung
-case $1 in
+case $GPIO in
 0)
   var_str_txt='sonnig'
   var_rain=1
@@ -261,45 +290,45 @@ case $1 in
   var_rain=0
   ;;
 esac
-var_input_str=$1
+var_input_str=$GPIO
 }
 
 merge () {
-clean $1
+clean $GPIO
 translate $var_str
 }
 
 
-if [ -e $DATEI ]; then
+if [ -e $FORECAST_FILE ]; then
 
 H=$(date +%H)
 if [ 3 -le $H ] && [ $H -lt 11 ]; then 
  #06:00 a.m. weather 
- merge $(sed -n '18{p;q}' $DATEI)
- clean $(sed -n '19{p;q}' $DATEI)
+ merge $(sed -n '18{p;q}' $FORECAST_FILE)
+ clean $(sed -n '19{p;q}' $FORECAST_FILE)
  max_temp=$var_str
- clean $(sed -n '20{p;q}' $DATEI)
+ clean $(sed -n '20{p;q}' $FORECAST_FILE)
  min_temp=$var_str
 elif [ 11 -le $H ] && [ $H -lt 17 ]; then 
  #11:00 a.m.
- merge $(sed -n '26{p;q}' $DATEI)
- clean $(sed -n '27{p;q}' $DATEI)
+ merge $(sed -n '26{p;q}' $FORECAST_FILE)
+ clean $(sed -n '27{p;q}' $FORECAST_FILE)
  max_temp=$var_str
- clean $(sed -n '28{p;q}' $DATEI)
+ clean $(sed -n '28{p;q}' $FORECAST_FILE)
  min_temp=$var_str
 elif [ 17 -le $H ] && [ $H -lt 23 ]; then
  #5 p.m.
- merge $(sed -n '34{p;q}' $DATEI)
- clean $(sed -n '35{p;q}' $DATEI)
+ merge $(sed -n '34{p;q}' $FORECAST_FILE)
+ clean $(sed -n '35{p;q}' $FORECAST_FILE)
  max_temp=$var_str
- clean $(sed -n '36{p;q}' $DATEI)
+ clean $(sed -n '36{p;q}' $FORECAST_FILE)
  min_temp=$var_str
 else
  #11 p.m.
- merge $(sed -n '42{p;q}' $DATEI)
- clean $(sed -n '43{p;q}' $DATEI)
+ merge $(sed -n '42{p;q}' $FORECAST_FILE)
+ clean $(sed -n '43{p;q}' $FORECAST_FILE)
  max_temp=$var_str
- clean $(sed -n '44{p;q}' $DATEI)
+ clean $(sed -n '44{p;q}' $FORECAST_FILE)
  min_temp=$var_str
 fi
 fi
@@ -316,7 +345,7 @@ if [ $? -ne 0 ]; then
 exit 1
 fi
 
-if [ $4 -eq 1 ]; then
+if [ $WEATHER_HISTORY_ONLY -eq 1 ]; then
 #error codes you can find on top
 exit 99
 fi
@@ -335,29 +364,29 @@ echo $now": GPIO Input $i - STATUS: $(/usr/local/bin/gpio -g read $i)" >> $LOG
 done
 
 #firstly, check whether parameters has been entered
-if [ -n "$1" ]
+if [ -n "$GPIO" ]
    then
-    echo `date +%Y%m%d-%H%M%S`": You have entered GPIO $1 Input" >> $LOG
+    echo `date +%Y%m%d-%H%M%S`": You have entered GPIO $GPIO Input" >> $LOG
    else 
     echo `date +%Y%m%d-%H%M%S`": You haven't entered a GPIO# input" >> $ERR
     exit 1
 fi
 
-if [ -n "$2" ]
+if [ -n "$RAIN_PERIODE" ]
    then
-    echo `date +%Y%m%d-%H%M%S`": You have entered raintime period in seconds: $2" >> $LOG
+    echo `date +%Y%m%d-%H%M%S`": You have entered raintime period in seconds: $RAIN_PERIODE" >> $LOG
    else
     echo `date +%Y%m%d-%H%M%S`": You haven't entered a raintime period" >> $ERR
      exit 2
 fi
 
-if [ $3 -eq 0 ]
+if [ $CONSIDERING_WEATHERFORECAST -eq 0 ]
     then   
-      echo `date +%Y%m%d-%H%M%S`": weather forecast will not be considered: $3 and variable var_rain will be set to 1" >> $LOG
+      echo `date +%Y%m%d-%H%M%S`": weather forecast will not be considered: CONSIDERING_WEATHERFORECAST = $CONSIDERING_WEATHERFORECAST and variable var_rain will be set to 1" >> $LOG
       #not considering weather forecast just sets variable var_rain to 1 (open) 
       var_rain=1
     else
-     echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: $3" >> $LOG
+     echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: CONSIDERING_WEATHERFORECAST = $CONSIDERING_WEATHERFORECAST" >> $LOG
 	#reviewing weatherdata for last 8 hours, if the avg of raining is = 1 then script will continue 
 	rain_avg=$(mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -se "select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
 
@@ -376,16 +405,16 @@ fi
 
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
-/usr/local/bin/gpio -g write $1 0
+/usr/local/bin/gpio -g write $GPIO 0
 echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
 #Waiting the entered time period before closing ventile
  sleep $2
 
  #Turn off GPIO Input
- /usr/local/bin/gpio -g write $1 1
+ /usr/local/bin/gpio -g write $GPIO 1
 
- echo `date +%Y%m%d-%H%M%S`": GPIO Input $1 - STATUS: $(/usr/local/bin/gpio -g read $1)" >> $LOG
-else
+ echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $(/usr/local/bin/gpio -g read $GPIO)" >> $LOG
+ele
  echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
 fi
 
@@ -393,4 +422,4 @@ fi
 echo "################################################" >> $LOG
 echo "#[END] RAIN SKRIPT" >> $LOG
 echo "################################################" >> $LOG
-
+echo $?
