@@ -79,12 +79,6 @@ eval set -- "$TEMP"
         *) echo "Internal error!" ; exit 1 ;;
     esac
  done
-echo $CONSIDERING_WEATHERFORECAST
-echo $WEATHER_HISTORY_ONLY
-echo $GPIO
-echo $RAIN_PERIODE
-
-exit 1000
 
 #further variables definition based on input parameters
 LOG="$WORK_DIR/RAIN_$GPIO.log"
@@ -428,4 +422,4 @@ fi
 echo "################################################" >> $LOG
 echo "#[END] RAIN SKRIPT" >> $LOG
 echo "################################################" >> $LOG
-
+echo $?
