@@ -93,7 +93,7 @@ wget $FC -O $FORECAST_FILE 1>/dev/null 2>&1
 
 #Functions for string processing
 clean () {
-var_str=$GPIO
+var_str=$1
 var_str=${var_str#*>}
 var_str=${var_str%<*}
 }
@@ -104,7 +104,8 @@ translate () {
 var_str_txt=""
 var_input_str=""
 var_rain=0  #beduetet keine Beregnung
-case $GPIO in
+echo $1
+case $1 in
 0)
   var_str_txt='sonnig'
   var_rain=1
@@ -290,11 +291,10 @@ case $GPIO in
   var_rain=0
   ;;
 esac
-var_input_str=$GPIO
 }
 
 merge () {
-clean $GPIO
+clean $1
 translate $var_str
 }
 
