@@ -104,7 +104,6 @@ translate () {
 var_str_txt=""
 var_input_str=""
 var_rain=0  #beduetet keine Beregnung
-echo $1
 case $1 in
 0)
   var_str_txt='sonnig'
