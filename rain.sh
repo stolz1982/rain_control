@@ -29,9 +29,9 @@
 #
 # Input parameters
 # -V|--ventile = ventile which is the gpio port
-# -t|--time = the time of raining period
+# -t|--time = the time of raining period in seconds
 # -f|--noforecast = forecast will be not considered, CONSIDERING_WEATHERFORECAST=0
-# -h|--history-only = execute just the sql commnad in order to build the history, WEATHER_HISTORY_ONLY=1
+# -h|--history-only = execute the sql command in order to build the history, WEATHER_HISTORY_ONLY=1
 # 
 #######################################################
 
@@ -40,13 +40,14 @@
 # exit codes
 # 0 = as usuaul everything is fine
 # 1 = check
-# 99 = everthing is fine and just build the weather forecast history
+# 99 = everything is fine and just build the weather forecast history
 # 100 = no raining due to a lot of rain within the last 8 hours
 # 101 = no raining due to maximum forecast temperature of less than 16 degrees
 #
 #######################################################
 
 #DEFINITION VARIABLES
+CONFIG_FILE="/etc/rain_control.cfg"
 WORK_DIR="/home/user01/skript/rain_control"
 FORECAST_FILE="$WORK_DIR/WEATHER.DAT"
 FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
