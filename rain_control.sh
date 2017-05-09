@@ -40,6 +40,7 @@
 # exit codes
 # 0 = as usuaul everything is fine
 # 1 = check
+# 2 = no config file exist
 # 99 = everything is fine and just build the weather forecast history
 # 100 = no raining due to a lot of rain within the last 8 hours
 # 101 = no raining due to maximum forecast temperature of less than 16 degrees
@@ -49,25 +50,14 @@
 #DEFINITION VARIABLES
 CONFIG_FILE="/etc/rain_control.cfg"
 
-#DEFAULT SETTINGS
-#Setting will be overwritten if one of the settings exists in the config file
-WORK_DIR="/home/user01/skript/rain_control"
-LOG_DIR="/var/log/rain_control"
-FORECAST_FILE="$WORK_DIR/WEATHER.DAT"
-#FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
-DB_SERVER_IP="192.168.2.202"
-DB_USER="temperatur"
-BREAK_TEMP="15"
-CONSIDERING_WEATHERFORECAST=1
-WEATHER_HISTORY_ONLY=0
-
-
 if [ -e "$CONFIG_FILE" ]
    then
-	. $CONFIG_FILE    
+	. $CONFIG_FILE
+   else
+   	exit 2
 fi
 
-if [ ! -e "$CONFIG_FILE" ]
+if [ ! -d "$LOG_DIR" ]
    then
 	mkdir $LOG_DIR
 fi
@@ -379,7 +369,7 @@ echo "#[START] RAIN SKRIPT" >> $LOG
 echo "################################################" >> $LOG
 
 #Turn off all connected GPIOS (in total 8 because of I am using an 8 channel relay)
-for i in 17 18 27 22 23 24 10 9
+for i in $USED_GPIOS
 do
 /usr/local/bin/gpio export $i out && /usr/local/bin/gpio -g write $i 1
 now=`date +%Y%m%d-%H%M%S`
