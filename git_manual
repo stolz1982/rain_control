@@ -1,5 +1,6 @@
 t#http://rogerdudler.github.io/git-guide/ --> good one
-#sudo apt-get install git #im Verzeichnis vom RAIN lokal wechselen
+#sudo apt-get install git 
+#im Verzeichnis vom RAIN lokal wechselen
 #git init 
 #git clone https://github.com/stolz1982/rain_control.git
 #git add <Filename> or git add *
