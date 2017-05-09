@@ -371,9 +371,9 @@ echo "################################################" >> $LOG
 #Turn off all connected GPIOS (in total 8 because of I am using an 8 channel relay)
 for i in $USED_GPIOS
 do
-/usr/local/bin/gpio export $i out && /usr/local/bin/gpio -g write $i 1
+$CMD_DIR/gpio export $i out && CMD_DIR/gpio -g write $i 1
 now=`date +%Y%m%d-%H%M%S`
-echo $now": GPIO Input $i - STATUS: $(/usr/local/bin/gpio -g read $i)" >> $LOG
+echo $now": GPIO Input $i - STATUS: $($CMD_DIR/gpio -g read $i)" >> $LOG
 done
 
 #firstly, check whether parameters has been entered
@@ -418,15 +418,15 @@ fi
 
 if [ $var_rain -eq 1 ]; then
 #set gpio input status = 0 which opens the appropriate ventile
-/usr/local/bin/gpio -g write $GPIO 0
+$CMD_DIR/gpio -g write $GPIO 0
 echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
 #Waiting the entered time period before closing ventile
  sleep $RAIN_PERIODE 
 
  #Turn off GPIO Input
- /usr/local/bin/gpio -g write $GPIO 1
+ $CMD_DIR/gpio -g write $GPIO 1
 
- echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $(/usr/local/bin/gpio -g read $GPIO)" >> $LOG
+ echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $($CMD_DIR/gpio -g read $GPIO)" >> $LOG
 else
  echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
 fi
