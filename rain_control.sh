@@ -48,14 +48,30 @@
 
 #DEFINITION VARIABLES
 CONFIG_FILE="/etc/rain_control.cfg"
+
+#DEFAULT SETTINGS
+#Setting will be overwritten if one of the settings exists in the config file
 WORK_DIR="/home/user01/skript/rain_control"
+LOG_DIR="/var/log/rain_control"
 FORECAST_FILE="$WORK_DIR/WEATHER.DAT"
-FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
+#FC="http://api.wetter.com/forecast/weather/city/DE0007167/project/rain/cs/ca5ad911fabd64827d48cf0ab869dc76"
 DB_SERVER_IP="192.168.2.202"
 DB_USER="temperatur"
 BREAK_TEMP="15"
 CONSIDERING_WEATHERFORECAST=1
 WEATHER_HISTORY_ONLY=0
+
+
+if [ -e "$CONFIG_FILE" ]
+   then
+	. $CONFIG_FILE    
+fi
+
+if [ ! -e "$CONFIG_FILE" ]
+   then
+	mkdir $LOG_DIR
+fi
+
 
 # Read the options
 TEMP=`getopt -o nhV:t: --long ventile:,noforecast,historyonly,time: -n 'rain_getopt.sh' -- "$@"`
@@ -82,8 +98,8 @@ eval set -- "$TEMP"
  done
 
 #further variables definition based on input parameters
-LOG="$WORK_DIR/RAIN_$GPIO.log"
-ERR="$WORK_DIR/RAIN_$GPIO.err"
+LOG="$LOG_DIR/RAIN_$GPIO.log"
+ERR="$LOG_DIR/RAIN_$GPIO.err"
 
 #Initial deleting Files
 rm -f $ERR
