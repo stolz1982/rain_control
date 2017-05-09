@@ -352,7 +352,7 @@ fi
 # store the weather forecast data (pls see on top the parameter description) 
 
 #building weather forecast history
-mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
+mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
 
 if [ $? -ne 0 ]; then
 exit 1
