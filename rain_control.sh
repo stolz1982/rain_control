@@ -368,12 +368,12 @@ echo "################################################" >> $LOG
 echo "#[START] RAIN SKRIPT" >> $LOG
 echo "################################################" >> $LOG
 
-#Turn off all connected GPIOS (in total 8 because of I am using an 8 channel relay)
-for i in $USED_GPIOS
+#Turn off all possible GPIOS
+#Security Feature
+until [ $i -gt 32 ]
 do
 $CMD_DIR/gpio export $i out && CMD_DIR/gpio -g write $i 1
-now=`date +%Y%m%d-%H%M%S`
-echo $now": GPIO Input $i - STATUS: $($CMD_DIR/gpio -g read $i)" >> $LOG
+i=$(( i+1 ))
 done
 
 #firstly, check whether parameters has been entered
