@@ -16,17 +16,6 @@
 
 #######################################################
 #
-# GPIO Inputs and related Ventiles locations
-# 17 = in front of the house and path to the garage
-# 18 = flowers bed beyond the house
-# 27 = first part of the mid field
-# 22 = upper right part of the mid field
-# 23 = upper left part of the mid field
-#
-#######################################################
-
-#######################################################
-#
 # Input parameters
 # -V|--ventile = ventile which is the gpio port
 # -t|--time = the time of raining period in seconds
