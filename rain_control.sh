@@ -30,7 +30,7 @@
 # Input parameters
 # -V|--ventile = ventile which is the gpio port
 # -t|--time = the time of raining period in seconds
-# -f|--noforecast = forecast will be not considered, CONSIDERING_WEATHERFORECAST=0
+# -n|--noforecast = forecast will be not considered, CONSIDERING_WEATHERFORECAST=0
 # -h|--history-only = execute the sql command in order to build the history, WEATHER_HISTORY_ONLY=1
 # 
 #######################################################
@@ -93,10 +93,10 @@ ERR="$LOG_DIR/RAIN_$GPIO.err"
 
 #Initial deleting Files
 rm -f $ERR
-rm -f $FORECAST_FILE
+rm -f ./$FORECAST_FILE
 
 #Getting weather forecast data for my hometown
-wget $FC -O $FORECAST_FILE 1>/dev/null 2>&1
+wget $FC -O ./$FORECAST_FILE 1>/dev/null 2>&1
 
 #Functions for string processing
 clean () {
@@ -310,31 +310,31 @@ if [ -e $FORECAST_FILE ]; then
 H=$(date +%H)
 if [ 3 -le $H ] && [ $H -lt 11 ]; then 
  #06:00 a.m. weather 
- merge $(sed -n '18{p;q}' $FORECAST_FILE)
- clean $(sed -n '19{p;q}' $FORECAST_FILE)
+ merge $(sed -n '22{p;q}' $FORECAST_FILE)
+ clean $(sed -n '23{p;q}' $FORECAST_FILE)
  max_temp=$var_str
- clean $(sed -n '20{p;q}' $FORECAST_FILE)
+ clean $(sed -n '24{p;q}' $FORECAST_FILE)
  min_temp=$var_str
 elif [ 11 -le $H ] && [ $H -lt 17 ]; then 
  #11:00 a.m.
- merge $(sed -n '26{p;q}' $FORECAST_FILE)
- clean $(sed -n '27{p;q}' $FORECAST_FILE)
+ merge $(sed -n '30{p;q}' $FORECAST_FILE)
+ clean $(sed -n '31{p;q}' $FORECAST_FILE)
  max_temp=$var_str
- clean $(sed -n '28{p;q}' $FORECAST_FILE)
+ clean $(sed -n '32{p;q}' $FORECAST_FILE)
  min_temp=$var_str
 elif [ 17 -le $H ] && [ $H -lt 23 ]; then
  #5 p.m.
- merge $(sed -n '34{p;q}' $FORECAST_FILE)
- clean $(sed -n '35{p;q}' $FORECAST_FILE)
+ merge $(sed -n '38{p;q}' $FORECAST_FILE)
+ clean $(sed -n '39{p;q}' $FORECAST_FILE)
  max_temp=$var_str
- clean $(sed -n '36{p;q}' $FORECAST_FILE)
+ clean $(sed -n '40{p;q}' $FORECAST_FILE)
  min_temp=$var_str
 else
  #11 p.m.
- merge $(sed -n '42{p;q}' $FORECAST_FILE)
- clean $(sed -n '43{p;q}' $FORECAST_FILE)
+ merge $(sed -n '46{p;q}' $FORECAST_FILE)
+ clean $(sed -n '47{p;q}' $FORECAST_FILE)
  max_temp=$var_str
- clean $(sed -n '44{p;q}' $FORECAST_FILE)
+ clean $(sed -n '48{p;q}' $FORECAST_FILE)
  min_temp=$var_str
 fi
 fi
@@ -352,7 +352,7 @@ fi
 # store the weather forecast data (pls see on top the parameter description) 
 
 #building weather forecast history
-mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_PWD -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
+#mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_PWD -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
 
 if [ $? -ne 0 ]; then
 exit 1
@@ -370,9 +370,10 @@ echo "################################################" >> $LOG
 
 #Turn off all possible GPIOS
 #Security Feature
-until [ $i -gt 32 ]
+i=1
+until [ $i -gt 32 ] 
 do
-$CMD_DIR/gpio export $i out && CMD_DIR/gpio -g write $i 1
+$CMD_DIR/gpio export $i out && $CMD_DIR/gpio -g write $i 1
 i=$(( i+1 ))
 done
 
