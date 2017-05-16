@@ -50,6 +50,11 @@
 #DEFINITION VARIABLES
 CONFIG_FILE="/etc/rain_control.cfg"
 
+#Settings Defaults
+RAIN_PERIODE=60
+GPIO=0
+
+
 if [ -e "$CONFIG_FILE" ]
    then
 	. $CONFIG_FILE
@@ -86,6 +91,10 @@ eval set -- "$TEMP"
         *) echo "Internal error!" ; exit 1 ;;
     esac
  done
+
+
+
+
 
 #further variables definition based on input parameters
 LOG="$LOG_DIR/RAIN_$GPIO.log"
@@ -352,7 +361,7 @@ fi
 # store the weather forecast data (pls see on top the parameter description) 
 
 #building weather forecast history
-#mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_PWD -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
+mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_PWD -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
 
 if [ $? -ne 0 ]; then
 exit 1
