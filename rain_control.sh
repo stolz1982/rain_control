@@ -21,6 +21,8 @@
 # -t|--time = the time of raining period in seconds
 # -n|--noforecast = forecast will be not considered, CONSIDERING_WEATHERFORECAST=0
 # -h|--history-only = execute the sql command in order to build the history, WEATHER_HISTORY_ONLY=1
+# -m|--max = if the forecasted max temp will excedds entered temperature then raining will be considered
+# -r|--refill = if this option is entered it is necessary to provide 2 options (Ventile and time)
 # 
 #######################################################
 
@@ -59,7 +61,7 @@ fi
 
 
 # Read the options
-TEMP=`getopt -o nhV:t:m: --long ventile:,noforecast,historyonly,time:,max: -n 'rain_getopt.sh' -- "$@"`
+TEMP=`getopt -o nhV:t:m:r: --long ventile:,noforecast,historyonly,time:,max:,refill: -n 'rain_getopt.sh' -- "$@"`
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
@@ -82,6 +84,16 @@ eval set -- "$TEMP"
             case "$2" in
                 "") shift 2 ;;
                 *) MAX_ENTERED_TEMP=$2 ; shift 2 ;;
+            esac ;;
+	    
+	    
+	    #refill option needs two inputs: 1. Ventile, 2. time
+	    #example: ./rain_control.sh -V 18 -m 25 -r 19 20
+	    #this option can refill tanks or what else in one command including refill ventile and refill time 
+	    -r|--refill)
+            case "$2" in
+                "") shift 2 ;;
+                *) REFILL_VENTILE=$2 ; shift ; REFILL_TIME=$1 , shift ;;
             esac ;;
 	    
 	--) shift ; break ;;
@@ -310,6 +322,23 @@ clean $1
 translate $var_str
 }
 
+raining() {
+if [ $var_rain -eq 1 ]; then
+#set gpio input status = 0 which opens the appropriate ventile
+$CMD_DIR/gpio -g write $GPIO 0
+echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
+#Waiting the entered time period before closing ventile
+ sleep $RAIN_PERIODE 
+
+ #Turn off GPIO Input
+ $CMD_DIR/gpio -g write $GPIO 1
+
+ echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $($CMD_DIR/gpio -g read $GPIO)" >> $LOG
+else
+ echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
+fi
+}
+
 
 if [ -e $FORECAST_FILE ]; then
 
@@ -432,20 +461,8 @@ if [  "$max_temp" -gt "$MAX_ENTERED_TEMP" ]
     	echo `date +%Y%m%d-%H%M%S`": Raining due to entered temperature($MAX_ENTERED_TEMP °C) greater than forcecasted maximum temperature ($max_temp °C)" >> $LOG
 fi
 
-if [ $var_rain -eq 1 ]; then
-#set gpio input status = 0 which opens the appropriate ventile
-$CMD_DIR/gpio -g write $GPIO 0
-echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
-#Waiting the entered time period before closing ventile
- sleep $RAIN_PERIODE 
-
- #Turn off GPIO Input
- $CMD_DIR/gpio -g write $GPIO 1
-
- echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $($CMD_DIR/gpio -g read $GPIO)" >> $LOG
-else
- echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
-fi
+#call function raining
+raining()
 
 #Script End
 echo "################################################" >> $LOG
