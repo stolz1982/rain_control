@@ -103,8 +103,6 @@ eval set -- "$TEMP"
 
 
 
-
-
 #further variables definition based on input parameters
 LOG="$LOG_DIR/RAIN_$GPIO.log"
 ERR="$LOG_DIR/RAIN_$GPIO.err"
@@ -469,7 +467,7 @@ echo "################################################" >> $LOG
 echo "#[END] RAIN SKRIPT" >> $LOG
 echo "################################################" >> $LO
 
-If [ $REFILL == 1 ]
-  Then
-  
+if [ $REFILL == 1 ]
+  then
+ $0 -V $REFILL_VENTILE -t $REFILL_TIME
 fi
