@@ -469,5 +469,5 @@ echo "################################################" >> $LO
 
 if [ $REFILL == 1 ]
   then
- $0 -V $REFILL_VENTILE -t $REFILL_TIME
+ /bin/bash $WORK_DIR/$0 -V $REFILL_VENTILE -t $REFILL_TIME -n
 fi
