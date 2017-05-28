@@ -452,7 +452,7 @@ fi
 
 if [  "$max_temp" -gt "$MAX_ENTERED_TEMP" ]
    then
-   	echo `date +%Y%m%d-%H%M%S`": No Raining due to Forescasted maximum temperature ($max_temp °C) less than entered temperature ($MAX_ENTERED_TEMP °C) >> $LOG
+   	echo `date +%Y%m%d-%H%M%S`": No Raining due to Forescasted maximum temperature ($max_temp °C) less than entered temperature ($MAX_ENTERED_TEMP °C)" >> $LOG
    	echo `date +%Y%m%d-%H%M%S`": Script exit with code 102" >> $LOG
 	exit 102
    else
