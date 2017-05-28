@@ -93,7 +93,7 @@ eval set -- "$TEMP"
 	    -r|--refill)
             case "$2" in
                 "") shift 2 ;;
-                *) REFILL_VENTILE=$2 ; shift ; REFILL_TIME=$1 , shift ;;
+                *) REFILL=1 ; REFILL_VENTILE=$2 ; shift ; REFILL_TIME=$1 , shift ;;
             esac ;;
 	    
 	--) shift ; break ;;
@@ -467,4 +467,9 @@ raining()
 #Script End
 echo "################################################" >> $LOG
 echo "#[END] RAIN SKRIPT" >> $LOG
-echo "################################################" >> $LOG
+echo "################################################" >> $LO
+
+If [ $REFILL == 1 ]
+  Then
+  
+fi
