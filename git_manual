@@ -1,4 +1,4 @@
-t#http://rogerdudler.github.io/git-guide/ --> good one
+#http://rogerdudler.github.io/git-guide/ --> good one
 #sudo apt-get install git 
 #im Verzeichnis vom RAIN lokal wechselen
 #git init 
