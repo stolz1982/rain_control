@@ -350,7 +350,7 @@ fi
 # store the weather forecast data (pls see on top the parameter description) 
 
 #building weather forecast history
-mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_PWD -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
+mysql -h $DB_SERVER_IP -u$DB_USER -p$DB_PWD -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
 
 if [ $? -ne 0 ]; then
 exit 1
@@ -400,9 +400,12 @@ if [ $CONSIDERING_WEATHERFORECAST -eq 0 ]
     else
      echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: CONSIDERING_WEATHERFORECAST = $CONSIDERING_WEATHERFORECAST" >> $LOG
 	#reviewing weatherdata for last 8 hours, if the avg of raining is = 1 then script will continue 
-	rain_avg=$(mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_USER -D home -se "select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
+ 
+rain_avg=$(mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_PWD -D home -Nse "select round(avg(beregnung)) as avgrain from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
 
-	if [ $rain_avg -lt 1 ]; then
+#hier kam des Ãfteren ein Fehler, Can't connect to MySQL server on 'IP xxxxx' (101), habe nie herausbekommen woran der Fehler im Detail lag aber eine Neustart des mysqld auf dem db server half
+
+if [ "$rain_avg" -lt 1 ]; then
 		echo `date +%Y%m%d-%H%M%S`": No raining due to a lot of rain within last 8 hours: $rain_avg" >> $LOG
 		echo `date +%Y%m%d-%H%M%S`": Script exit with code 100" >> $LOG
 		exit 100
