@@ -21,6 +21,8 @@
 # -t|--time = the time of raining period in seconds
 # -n|--noforecast = forecast will be not considered, CONSIDERING_WEATHERFORECAST=0
 # -h|--history-only = execute the sql command in order to build the history, WEATHER_HISTORY_ONLY=1
+# -m|--max = if the forecasted max temp will excedds entered temperature then raining will be considered
+# -r|--refill = if this option is entered it is necessary to provide 2 options (Ventile and time)
 # 
 #######################################################
 
@@ -33,6 +35,7 @@
 # 99 = everything is fine and just build the weather forecast history
 # 100 = no raining due to a lot of rain within the last 8 hours
 # 101 = no raining due to maximum forecast temperature of less than 16 degrees
+# 102 = no raining due to option -m // --max temperature and forecasted max temperature is less
 #
 #######################################################
 
@@ -58,7 +61,7 @@ fi
 
 
 # Read the options
-TEMP=`getopt -o nhV:t: --long ventile:,noforecast,historyonly,time: -n 'rain_getopt.sh' -- "$@"`
+TEMP=`getopt -o nhV:t:m:r: --long ventile:,noforecast,historyonly,time:,max:,refill: -n 'rain_getopt.sh' -- "$@"`
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
@@ -76,12 +79,27 @@ eval set -- "$TEMP"
                 "") shift 2 ;;
                 *) RAIN_PERIODE=$2 ; shift 2 ;;
             esac ;;
+	    #if forecasted temperature exceeds temperature forecasted temperature the sprinkling will be start 
+	    -m|--max)
+            case "$2" in
+                "") shift 2 ;;
+                *) MAX_ENTERED_TEMP=$2 ; shift 2 ;;
+            esac ;;
+	    
+	    
+	    #refill option needs two inputs: 1. Ventile, 2. time
+	    #example: ./rain_control.sh -V 18 -m 25 -r 19 20
+	    #this option can refill tanks or what else in one command including refill ventile and refill time 
+	    -r|--refill)
+            case "$2" in
+                "") shift 2 ;;
+                *) REFILL=1 ; REFILL_VENTILE=$2 ; shift ; REFILL_TIME=$1 , shift ;;
+            esac ;;
+	    
 	--) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
     esac
  done
-
-
 
 
 
@@ -302,6 +320,23 @@ clean $1
 translate $var_str
 }
 
+raining() {
+if [ $var_rain -eq 1 ]; then
+#set gpio input status = 0 which opens the appropriate ventile
+$CMD_DIR/gpio -g write $GPIO 0
+echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
+#Waiting the entered time period before closing ventile
+ sleep $RAIN_PERIODE 
+
+ #Turn off GPIO Input
+ $CMD_DIR/gpio -g write $GPIO 1
+
+ echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $($CMD_DIR/gpio -g read $GPIO)" >> $LOG
+else
+ echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
+fi
+}
+
 
 if [ -e $FORECAST_FILE ]; then
 
@@ -412,28 +447,30 @@ if [ "$rain_avg" -lt 1 ]; then
 	fi
 	
 	if [ $max_temp -lt $BREAK_TEMP ]; then
-		echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than $BREAK_TEMP  degrees: $max_temp" >> $LOG
+		echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than $BREAK_TEMP °C degrees: $max_temp °C" >> $LOG
 		echo `date +%Y%m%d-%H%M%S`": Script exit with code 101" >> $LOG
 		exit 101
 	fi
 fi
 
-if [ $var_rain -eq 1 ]; then
-#set gpio input status = 0 which opens the appropriate ventile
-$CMD_DIR/gpio -g write $GPIO 0
-echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
-#Waiting the entered time period before closing ventile
- sleep $RAIN_PERIODE 
-
- #Turn off GPIO Input
- $CMD_DIR/gpio -g write $GPIO 1
-
- echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $($CMD_DIR/gpio -g read $GPIO)" >> $LOG
-else
- echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
+if [  "$max_temp" -gt "$MAX_ENTERED_TEMP" ]
+   then
+   	echo `date +%Y%m%d-%H%M%S`": No Raining due to Forescasted maximum temperature ($max_temp °C) less than entered temperature ($MAX_ENTERED_TEMP °C)" >> $LOG
+   	echo `date +%Y%m%d-%H%M%S`": Script exit with code 102" >> $LOG
+	exit 102
+   else
+    	echo `date +%Y%m%d-%H%M%S`": Raining due to entered temperature($MAX_ENTERED_TEMP °C) greater than forcecasted maximum temperature ($max_temp °C)" >> $LOG
 fi
+
+#call function raining
+raining()
 
 #Script End
 echo "################################################" >> $LOG
 echo "#[END] RAIN SKRIPT" >> $LOG
-echo "################################################" >> $LOG
+echo "################################################" >> $LO
+
+if [ $REFILL == 1 ]
+  then
+ /bin/bash $WORK_DIR/$0 -V $REFILL_VENTILE -t $REFILL_TIME -n
+fi
