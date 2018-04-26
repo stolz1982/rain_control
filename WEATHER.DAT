@@ -11,45 +11,45 @@
     <logo>Download at http://www.wetter.com/api/downloads/#logos</logo>
   </credit>
   <forecast>
-    <date value="2018-04-25">
+    <date value="2018-04-26">
       <p>24</p>
-      <w>1</w>
-      <tx>18</tx>
-      <tn>7</tn>
-      <d>1524636000</d>
+      <w>80</w>
+      <tx>14</tx>
+      <tn>6</tn>
+      <d>1524722400</d>
       <time value="06:00">
         <p>5</p>
-        <w>3</w>
-        <tx>15</tx>
-        <tn>12</tn>
-        <d>1524636000</d>
-        <w_txt>bedeckt</w_txt>
+        <w>80</w>
+        <tx>11</tx>
+        <tn>6</tn>
+        <d>1524722400</d>
+        <w_txt>leichter Regen - Schauer</w_txt>
       </time>
       <time value="11:00">
         <p>6</p>
-        <w>1</w>
-        <tx>18</tx>
-        <tn>14</tn>
-        <d>1524654000</d>
-        <w_txt>leicht bewölkt</w_txt>
+        <w>80</w>
+        <tx>14</tx>
+        <tn>11</tn>
+        <d>1524740400</d>
+        <w_txt>leichter Regen - Schauer</w_txt>
       </time>
       <time value="17:00">
         <p>6</p>
         <w>0</w>
         <tx>13</tx>
         <tn>7</tn>
-        <d>1524675600</d>
+        <d>1524762000</d>
         <w_txt>sonnig</w_txt>
       </time>
       <time value="23:00">
         <p>6</p>
         <w>0</w>
-        <tx>7</tx>
-        <tn>6</tn>
-        <d>1524697200</d>
+        <tx>6</tx>
+        <tn>4</tn>
+        <d>1524783600</d>
         <w_txt>klar</w_txt>
       </time>
-      <w_txt>leicht bewölkt</w_txt>
+      <w_txt>leichter Regen - Schauer</w_txt>
     </date>
   </forecast>
 </city>
