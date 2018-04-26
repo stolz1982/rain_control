@@ -36,27 +36,36 @@
 # 100 = no raining due to a lot of rain within the last 8 hours
 # 101 = no raining due to maximum forecast temperature of less than 16 degrees
 # 102 = no raining due to option -m // --max temperature and forecasted max temperature is less
-#
+# 103 = mysql connection 
 #######################################################
 
 #DEFINITION VARIABLES
-CONFIG_FILE="/etc/rain_control.cfg"
+CONFIG_FILE="/home/user01/rain_control/rain_control.cfg"
 
 #Settings Defaults
 RAIN_PERIODE=60
 GPIO=0
+MAX_ENTERED_TEMP=18
+BREAK_TEMP=14
 
+#Script Start
+echo "################################################" | tee $LOG
+echo "#[START] RAIN SKRIPT" | tee $LOG
+echo "################################################" | tee $LOG
 
 if [ -e "$CONFIG_FILE" ]
    then
 	. $CONFIG_FILE
+	echo `date +%Y%m%d-%H%M%S`": $CONFIG_FILE has been sourced" | tee $LOG
    else
+	echo `date +%Y%m%d-%H%M%S`": $CONFIG_FILE not available, SCRIPT stopped with exit code 2" | tee $LOG
    	exit 2
 fi
 
 if [ ! -d "$LOG_DIR" ]
    then
 	mkdir $LOG_DIR
+	echo `date +%Y%m%d-%H%M%S`": $LOG_DIR does not exists and has been created" | tee $LOG
 fi
 
 
@@ -105,14 +114,21 @@ eval set -- "$TEMP"
 
 #further variables definition based on input parameters
 LOG="$LOG_DIR/RAIN_$GPIO.log"
-ERR="$LOG_DIR/RAIN_$GPIO.err"
 
-#Initial deleting Files
-rm -f $ERR
+#Initial deleting File
 rm -f ./$FORECAST_FILE
 
 #Getting weather forecast data for my hometown
+echo `date +%Y%m%d-%H%M%S`": START to get $FORECAST_FILE" | tee $LOG
 wget $FC -O ./$FORECAST_FILE 1>/dev/null 2>&1
+
+if [ $? -eq 0 ]; then
+	echo `date +%Y%m%d-%H%M%S`": FINISHED to get $FORECAST_FILE" | tee $LOG
+else
+	echo `date +%Y%m%d-%H%M%S`": ERROR during trying to get $FORECAST_FILE" | tee $LOG
+fi
+
+echo `date +%Y%m%d-%H%M%S`": Start of string processing" | tee $LOG
 
 #Functions for string processing
 clean () {
@@ -315,29 +331,18 @@ case $1 in
 esac
 }
 
+
 merge () {
 clean $1
 translate $var_str
 }
 
-raining() {
-if [ $var_rain -eq 1 ]; then
-#set gpio input status = 0 which opens the appropriate ventile
-$CMD_DIR/gpio -g write $GPIO 0
-echo `date +%Y%m%d-%H%M%S`": Raining will start - forecasted weather: $var_str_txt" >> $LOG
-#Waiting the entered time period before closing ventile
- sleep $RAIN_PERIODE 
-
- #Turn off GPIO Input
- $CMD_DIR/gpio -g write $GPIO 1
-
- echo `date +%Y%m%d-%H%M%S`": GPIO Input $GPIO - STATUS: $($CMD_DIR/gpio -g read $GPIO)" >> $LOG
-else
- echo `date +%Y%m%d-%H%M%S`": No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt" >> $LOG
-fi
-}
+echo `date +%Y%m%d-%H%M%S`": END of string processing" | tee $LOG
 
 
+
+
+echo `date +%Y%m%d-%H%M%S`": START of weather forecast processing" | tee $LOG
 if [ -e $FORECAST_FILE ]; then
 
 H=$(date +%H)
@@ -371,6 +376,7 @@ else
  min_temp=$var_str
 fi
 fi
+echo `date +%Y%m%d-%H%M%S`": END of weather forecast processing" | tee $LOG
 
 #check if temperatures are zero/empty otherwise mysql brings an error
 if [ -z $min_temp ] || [ ! "$min_temp" ]; then
@@ -381,96 +387,131 @@ if [ -z $max_temp ] || [ ! "$max_temp" ]; then
 max_temp=-99
 fi
 
+
+echo `date +%Y%m%d-%H%M%S`": START of DB writing" | tee $LOG
 #here starts the db writing history function 
 # store the weather forecast data (pls see on top the parameter description) 
 
 #building weather forecast history
-mysql -h $DB_SERVER_IP -u$DB_USER -p$DB_PWD -D home -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
+mysql -h $DB_SERVER_IP -u$DB_USER -p$DB_PWD -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
 
 if [ $? -ne 0 ]; then
+echo `date +%Y%m%d-%H%M%S`": EXIT of DB writing due to STATUS: $?. Script stopped with exit code 1" | tee $LOG
 exit 1
+else
+echo `date +%Y%m%d-%H%M%S`": END of DB writing, STATUS: $?" | tee $LOG
 fi
 
 if [ $WEATHER_HISTORY_ONLY -eq 1 ]; then
 #error codes you can find on top
+echo `date +%Y%m%d-%H%M%S`": Script stopped with exit code 99 because of WEATHER HISTORY only" | tee $LOG
 exit 99
 fi
 
-#Script Start
-echo "################################################" >> $LOG
-echo "#[START] RAIN SKRIPT" >> $LOG
-echo "################################################" >> $LOG
 
-#Turn off all possible GPIOS
-#Security Feature
-i=1
-until [ $i -gt 32 ] 
-do
-$CMD_DIR/gpio export $i out && $CMD_DIR/gpio -g write $i 1
-i=$(( i+1 ))
-done
+
+
 
 #firstly, check whether parameters has been entered
 if [ -n "$GPIO" ]
    then
-    echo `date +%Y%m%d-%H%M%S`": You have entered GPIO $GPIO Input" >> $LOG
+    echo `date +%Y%m%d-%H%M%S`": You have entered GPIO $GPIO Input" | tee $LOG
    else 
-    echo `date +%Y%m%d-%H%M%S`": You haven't entered a GPIO# input" >> $ERR
+    echo `date +%Y%m%d-%H%M%S`": You haven't entered a GPIO# input" | tee $LOG
     exit 1
 fi
 
 if [ -n "$RAIN_PERIODE" ]
    then
-    echo `date +%Y%m%d-%H%M%S`": You have entered raintime period in seconds: $RAIN_PERIODE" >> $LOG
+    echo `date +%Y%m%d-%H%M%S`": You have entered raintime period in seconds: $RAIN_PERIODE" | tee $LOG
    else
-    echo `date +%Y%m%d-%H%M%S`": You haven't entered a raintime period" >> $ERR
+    echo `date +%Y%m%d-%H%M%S`": You haven't entered a raintime period" | tee $LOG
      exit 2
 fi
 
 if [ $CONSIDERING_WEATHERFORECAST -eq 0 ]
     then   
-      echo `date +%Y%m%d-%H%M%S`": weather forecast will not be considered: CONSIDERING_WEATHERFORECAST = $CONSIDERING_WEATHERFORECAST and variable var_rain will be set to 1" >> $LOG
+      echo `date +%Y%m%d-%H%M%S`": weather forecast will not be considered: CONSIDERING_WEATHERFORECAST = $CONSIDERING_WEATHERFORECAST and variable var_rain will be set to 1" | tee $LOG
       #not considering weather forecast just sets variable var_rain to 1 (open) 
       var_rain=1
     else
-     echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: CONSIDERING_WEATHERFORECAST = $CONSIDERING_WEATHERFORECAST" >> $LOG
+     echo `date +%Y%m%d-%H%M%S`": weather forecast will be considered: CONSIDERING_WEATHERFORECAST = $CONSIDERING_WEATHERFORECAST" | tee $LOG
+
 	#reviewing weatherdata for last 8 hours, if the avg of raining is = 1 then script will continue 
- 
-rain_avg=$(mysql -h $DB_SERVER_IP -u $DB_USER -p$DB_PWD -D home -Nse "select round(avg(beregnung)) as avgrain from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
+	rain_avg=$(mysql --connect-timeout=10 -h $DB_SERVER_IP -u $DB_USER -p$DB_PWD -D $DATABASE_NAME -Nse "select round(avg(beregnung)) from wetterbericht where zeitstempel > DATE_SUB(NOW(),INTERVAL 8 HOUR);")
 
-#hier kam des �fteren ein Fehler, Can't connect to MySQL server on 'IP xxxxx' (101), habe nie herausbekommen woran der Fehler im Detail lag aber eine Neustart des mysqld auf dem db server half
+	#if the mysql query didn't work properly then the variable ran_avg will be set to 1
+	if [ "$?" -ne "0" ]; then
+		rain_avg=1
+	fi
 
-if [ "$rain_avg" -lt 1 ]; then
-		echo `date +%Y%m%d-%H%M%S`": No raining due to a lot of rain within last 8 hours: $rain_avg" >> $LOG
-		echo `date +%Y%m%d-%H%M%S`": Script exit with code 100" >> $LOG
+	if [ "$rain_avg" -lt 1 ]; then
+		echo `date +%Y%m%d-%H%M%S`": No raining due to a lot of rain within last 8 hours: $rain_avg" | tee $LOG
+		echo `date +%Y%m%d-%H%M%S`": Script exit with code 100" | tee $LOG
 		exit 100
 	fi
 	
 	if [ $max_temp -lt $BREAK_TEMP ]; then
-		echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than $BREAK_TEMP °C degrees: $max_temp °C" >> $LOG
-		echo `date +%Y%m%d-%H%M%S`": Script exit with code 101" >> $LOG
+		echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than $BREAK_TEMP °C degrees: $max_temp °C" | tee $LOG
+		echo `date +%Y%m%d-%H%M%S`": Script exit with code 101" | tee $LOG
 		exit 101
 	fi
 fi
 
-if [  "$max_temp" -gt "$MAX_ENTERED_TEMP" ]
+if [  $max_temp -gt $MAX_ENTERED_TEMP ]
    then
-   	echo `date +%Y%m%d-%H%M%S`": No Raining due to Forescasted maximum temperature ($max_temp °C) less than entered temperature ($MAX_ENTERED_TEMP °C)" >> $LOG
-   	echo `date +%Y%m%d-%H%M%S`": Script exit with code 102" >> $LOG
+   	echo `date +%Y%m%d-%H%M%S`": No Raining due to Forescasted maximum temperature ($max_temp °C) less than entered temperature ($MAX_ENTERED_TEMP °C)" | tee $LOG
+   	echo `date +%Y%m%d-%H%M%S`": Script exit with code 102" | tee $LOG
 	exit 102
    else
-    	echo `date +%Y%m%d-%H%M%S`": Raining due to entered temperature($MAX_ENTERED_TEMP °C) greater than forcecasted maximum temperature ($max_temp °C)" >> $LOG
+    	echo `date +%Y%m%d-%H%M%S`": Raining due to entered temperature($MAX_ENTERED_TEMP °C) greater than forcecasted maximum temperature ($max_temp °C)" | tee $LOG
 fi
 
+#Turn off all possible GPIOS
+#Security Feature
+echo `date +%Y%m%d-%H%M%S`": START of closing of all GPIOs" | tee $LOG
+i=1
+until [ $i -gt 30 ] 
+do
+$CMD_DIR/gpio export $i out && $CMD_DIR/gpio -g write $i 1
+echo `date +%Y%m%d-%H%M%S`": GPIO $i has been set to 1, STATUS: $?" | tee $LOG
+i=$(( i+1 ))
+done
+echo `date +%Y%m%d-%H%M%S`": END of closing of all GPIOs, STATUS: $?" | tee $LOG
+
+
+echo `date +%Y%m%d-%H%M%S`": START of calling function raining" | tee $LOG
 #call function raining
-raining()
+#raining()
+echo `date +%Y%m%d-%H%M%S`": END of function raining, STATUS: $?" | tee $LOG
 
-#Script End
-echo "################################################" >> $LOG
-echo "#[END] RAIN SKRIPT" >> $LOG
-echo "################################################" >> $LO
 
-if [ $REFILL == 1 ]
-  then
- /bin/bash $WORK_DIR/$0 -V $REFILL_VENTILE -t $REFILL_TIME -n
+echo `date +%Y%m%d-%H%M%S`": [RAINING] - function started" | tee $LOG
+if [ $var_rain -eq 1 ]; then
+	#set gpio input status = 0 which opens the appropriate ventile
+	echo `date +%Y%m%d-%H%M%S`": [RAINING] - VAR_RAIN: $var_rain, STATUS: $?" | tee $LOG
+	$CMD_DIR/gpio -g write $GPIO 0
+	echo `date +%Y%m%d-%H%M%S`": [RAINING] - starts because forecasted weather: $var_str_txt" | tee $LOG
+	#Waiting the entered time period before closing ventile
+	echo `date +%Y%m%d-%H%M%S`": [RAINING] - sleeping for $RAIN_PERIODE seconds" | tee $LOG
+	sleep $RAIN_PERIODE 
+	echo `date +%Y%m%d-%H%M%S`": [RAINING] - slept for $RAIN_PERIODE seconds" | tee $LOG
+
+ 	#Turn off GPIO Input
+ 	$CMD_DIR/gpio -g write $GPIO 1
+ 	echo `date +%Y%m%d-%H%M%S`": [RAINING] - GPIO Input $GPIO - GPIOSTATUS: $($CMD_DIR/gpio -g read $GPIO), STATUS(function): $?" | tee $LOG
+else
+ 	echo `date +%Y%m%d-%H%M%S`": [RAINING] - No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt - STATUS: $?" | tee $LOG
 fi
+
+#REFILL SECTION
+if [ -z $REFILL ] || [ ! "$REFILL" ] || [ $REFILL -eq 0 ]; then
+ 	echo `date +%Y%m%d-%H%M%S`": [REFILL] - No Refill: $REFILL - STATUS: $?" | tee $LOG
+else
+ 	echo `date +%Y%m%d-%H%M%S`": [REFILL] - Refilling: $REFILL - VENTILE: $REFILL_VENTILE - TIME: $REFILL_TIME" | tee $LOG
+	/bin/bash $WORK_DIR/$0 -V $REFILL_VENTILE -t $REFILL_TIME -n
+fi
+
+echo "################################################" | tee $LOG
+echo "#[END] RAIN SKRIPT" | tee $LOG
+echo "################################################" | tee $LOG
