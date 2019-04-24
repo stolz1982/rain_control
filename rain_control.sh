@@ -95,6 +95,7 @@ eval set -- "$TEMP"
 	    -m|--max)
             case "$2" in
                 "") shift 2 ;;
+
                 *) MAX_ENTERED_TEMP=$2 ; shift 2 ;;
             esac ;;
 	    
@@ -113,7 +114,16 @@ eval set -- "$TEMP"
     esac
  done
 
+#checking the internet connectivity
+wget -q --spider http://google.com
 
+if [ $? -eq 0 ]; then
+	echo `date +%Y%m%d-%H%M%S`": Internet connectivity available" | tee $LOG
+	INTERNET_CONN=TRUE
+else
+	echo `date +%Y%m%d-%H%M%S`": Internet connectivity NOT available" | tee $LOG
+	INTERNET_CONN=FALSE
+fi
 
 #further variables definition based on input parameters
 LOG="$LOG_DIR/RAIN_$GPIO.log"
@@ -126,7 +136,7 @@ if [ $CONSIDERING_WEATHERFORECAST -ne 0 ]; then
 #Initial deleting File
 rm -f ./$FORECAST_FILE
 
-#Getting weather forecast data for my hometown
+#Getting weather forecast data
 echo `date +%Y%m%d-%H%M%S`": START to get $FORECAST_FILE" | tee $LOG
 wget $FC -O ./$FORECAST_FILE 1>/dev/null 2>&1
 
