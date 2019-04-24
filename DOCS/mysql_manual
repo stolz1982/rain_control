@@ -1,0 +1,5 @@
+alter table wetterbericht drop temperatur_min;
+alter table wetterbericht add temperatur_min DECIMAL(6,2);
+describe wetterbericht;
+alter table wetterbericht drop temperatur;
+

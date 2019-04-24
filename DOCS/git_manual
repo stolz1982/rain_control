@@ -1,0 +1,46 @@
+#http://rogerdudler.github.io/git-guide/ --> good one
+#sudo apt-get install git 
+#im Verzeichnis vom RAIN lokal wechselen
+#git init 
+#git clone https://github.com/stolz1982/rain_control.git
+#git add <Filename> or git add *
+#git commit -m "Commit message"
+#git push origin master
+#git pull origin master
+
+##how to pull a branch
+##change to a new directory to test
+#cd "Branchname"
+#git fetch origin
+#git checkout -b stolz1982-db-patch1 origin/stolz1982-db-patch1
+#git merge master
+
+##how to create a branch and switch to the created branch
+##dwd represents the new branch
+## we work the whole time in the same directory
+#git branch dwd
+#git checkout dwd
+##the above stated 2 commands can be merged to
+#git checkout -b dwd
+##applying changes to something......just work i mean
+#git commit -a -m 'applied changes to something within this new branch'
+##sync branch to server
+#git push origin dwd
+## get update command
+#git fetch --all --prune
+##now we switch to the master branch in order to merg dwd branch
+#git checkout master
+#git merge dwd
+##and if verything was fine, just the remove the merge
+#git branch -d dwd
+git push origin --delete dwd
+##control status
+#git status
+##the end
+
+
+
+##checkout is like switching, here in this case we switch back to master
+#git checkout master
+
+
