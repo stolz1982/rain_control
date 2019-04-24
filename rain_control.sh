@@ -107,7 +107,7 @@ eval set -- "$TEMP"
                 "") shift 2 ;;
                 *) REFILL=1 ; REFILL_VENTILE=$2 ; shift ; REFILL_TIME=$1 , shift ;;
             esac ;;
-	    
+
 	--) shift ; break ;;
         *) echo "Internal error!" ; exit 1 ;;
     esac
