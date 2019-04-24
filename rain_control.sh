@@ -45,8 +45,11 @@ CONFIG_FILE="/home/user01/rain_control/rain_control.cfg"
 #Settings Defaults
 RAIN_PERIODE=60
 GPIO=0
-MAX_ENTERED_TEMP=18
+#necessary parameter which don't start raining otherwise the grass will be burned
+MAX_ENTERED_TEMP=36
 BREAK_TEMP=14
+min_temp=-99
+max_temp=-99
 
 #Script Start
 echo "################################################" | tee $LOG
@@ -114,6 +117,11 @@ eval set -- "$TEMP"
 
 #further variables definition based on input parameters
 LOG="$LOG_DIR/RAIN_$GPIO.log"
+
+
+#if CONSIDERING_WEATHERFORECAST=0 then no need to download and process forecast and the appropriate files
+if [ $CONSIDERING_WEATHERFORECAST -ne 0 ]; then
+
 
 #Initial deleting File
 rm -f ./$FORECAST_FILE
@@ -409,8 +417,8 @@ exit 99
 fi
 
 
-
-
+#here ends the clause of NO_WEATHER_FORECAST
+fi
 
 #firstly, check whether parameters has been entered
 if [ -n "$GPIO" ]
