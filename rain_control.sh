@@ -60,7 +60,8 @@ fi
 
 if [ ! -d "$LOG_DIR" ]
 then
-mkdir $LOG_DIR
+sudo mkdir $LOG_DIR
+sudo chown -R user01:user01 $LOG_DIR
 fi
 
 
