@@ -11,45 +11,45 @@
     <logo>Download at http://www.wetter.com/api/downloads/#logos</logo>
   </credit>
   <forecast>
-    <date value="2019-04-24">
+    <date value="2023-08-29">
       <p>24</p>
-      <w>0</w>
-      <tx>22</tx>
-      <tn>11</tn>
-      <d>1556085600</d>
+      <w>61</w>
+      <tx>17</tx>
+      <tn>14</tn>
+      <d>1693288800</d>
       <time value="06:00">
         <p>5</p>
-        <w>1</w>
-        <tx>17</tx>
-        <tn>11</tn>
-        <d>1556085600</d>
-        <w_txt>leicht bewölkt</w_txt>
+        <w>61</w>
+        <tx>16</tx>
+        <tn>14</tn>
+        <d>1693288800</d>
+        <w_txt>leichter Regen</w_txt>
       </time>
       <time value="11:00">
         <p>6</p>
-        <w>0</w>
-        <tx>22</tx>
-        <tn>18</tn>
-        <d>1556103600</d>
-        <w_txt>sonnig</w_txt>
+        <w>61</w>
+        <tx>17</tx>
+        <tn>16</tn>
+        <d>1693306800</d>
+        <w_txt>leichter Regen</w_txt>
       </time>
       <time value="17:00">
         <p>6</p>
-        <w>0</w>
-        <tx>22</tx>
-        <tn>15</tn>
-        <d>1556125200</d>
-        <w_txt>sonnig</w_txt>
+        <w>61</w>
+        <tx>16</tx>
+        <tn>14</tn>
+        <d>1693328400</d>
+        <w_txt>leichter Regen</w_txt>
       </time>
       <time value="23:00">
         <p>6</p>
-        <w>0</w>
-        <tx>15</tx>
-        <tn>12</tn>
-        <d>1556146800</d>
-        <w_txt>klar</w_txt>
+        <w>61</w>
+        <tx>14</tx>
+        <tn>13</tn>
+        <d>1693350000</d>
+        <w_txt>leichter Regen</w_txt>
       </time>
-      <w_txt>sonnig</w_txt>
+      <w_txt>leichter Regen</w_txt>
     </date>
   </forecast>
 </city>
