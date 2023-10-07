@@ -11,18 +11,18 @@
     <logo>Download at http://www.wetter.com/api/downloads/#logos</logo>
   </credit>
   <forecast>
-    <date value="2023-08-29">
+    <date value="2023-10-07">
       <p>24</p>
       <w>61</w>
       <tx>17</tx>
-      <tn>14</tn>
-      <d>1693288800</d>
+      <tn>13</tn>
+      <d>1696658400</d>
       <time value="06:00">
         <p>5</p>
         <w>61</w>
-        <tx>16</tx>
-        <tn>14</tn>
-        <d>1693288800</d>
+        <tx>17</tx>
+        <tn>15</tn>
+        <d>1696658400</d>
         <w_txt>leichter Regen</w_txt>
       </time>
       <time value="11:00">
@@ -30,23 +30,23 @@
         <w>61</w>
         <tx>17</tx>
         <tn>16</tn>
-        <d>1693306800</d>
+        <d>1696676400</d>
         <w_txt>leichter Regen</w_txt>
       </time>
       <time value="17:00">
         <p>6</p>
         <w>61</w>
-        <tx>16</tx>
-        <tn>14</tn>
-        <d>1693328400</d>
+        <tx>15</tx>
+        <tn>13</tn>
+        <d>1696698000</d>
         <w_txt>leichter Regen</w_txt>
       </time>
       <time value="23:00">
         <p>6</p>
         <w>61</w>
-        <tx>14</tx>
-        <tn>13</tn>
-        <d>1693350000</d>
+        <tx>12</tx>
+        <tn>10</tn>
+        <d>1696719600</d>
         <w_txt>leichter Regen</w_txt>
       </time>
       <w_txt>leichter Regen</w_txt>

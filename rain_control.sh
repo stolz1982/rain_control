@@ -69,7 +69,7 @@ fi
 TEMP=`getopt -o nhV:t:m:r: --long ventile:,noforecast,historyonly,time:,max:,refill: -n 'rain_getopt.sh' -- "$@"`
 eval set -- "$TEMP"
 
-# extract options and their arguments into variables.
+# extract options and the arguments into variables.
 while true ; do
 case "$1" in
 -n|--noforecast) CONSIDERING_WEATHERFORECAST=0 ; shift ;;
@@ -108,11 +108,11 @@ esac
 done
 
 #further variables definition based on input parameters
-LOG="$LOG_DIR/RAIN_$GPIO.log"
-
+#LOG="$LOG_DIR/RAIN_$GPIO.log"
+LOG="$LOG_DIR/RAIN_${GPIO_NAME[$GPIO]}_$GPIO.log"
 #Script Start
 echo "################################################" | tee -a $LOG
-echo "#[START] RAIN SKRIPT" | tee -a -a $LOG
+echo "#[START] RAIN SKRIPT" | tee -a $LOG
 echo "################################################" | tee -a $LOG
 
 

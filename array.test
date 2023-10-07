@@ -1,0 +1,10 @@
+#!/bin/bash
+GpioName[1]='1'
+GpioName[3]='3'
+GpioName[4]='4'
+GpioName[5]='5'
+GpioName[17]='17-testurteil'
+GpioName[89]='89a'
+GPIO=17
+GPIO_NAME[2]=''
+echo ${GpioName[$GPIO]}
