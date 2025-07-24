@@ -154,252 +154,52 @@ fi
 
 echo `date +%Y%m%d-%H%M%S`": Start of string processing" | tee -a $LOG
 
-#Functions for string processing
-clean () {
-	var_str=$1
-		var_str=${var_str#*>}
-	var_str=${var_str%<*}
-}
-
-#translate is a function to define whether or not raining will take place which depends on
-#on weathercode. provided by a list from wetter.com 
+#translate is a function to define whether or not raining will take place 
 translate () {
-	var_str_txt=""
-		var_input_str=""
-		var_rain=0  #beduetet keine Beregnung
+		var_rain=0  #bedeutet keine Beregnung
 		case $1 in
-		0)
-		var_str_txt='sonnig'
-		var_rain=1
-		;;
-	1)
-		var_str_txt='leicht bewoelkt'
-		var_rain=1
-		;;
-	2)
-		var_str_txt='wolkig'
-		var_rain=1
-		;;
-	3)
-		var_str_txt='bedeckt'
-		var_rain=1
-		;;
-	4)
-		var_str_txt='Nebel'
-		var_rain=0
-		;;
-	5)
-		var_str_txt='Sprühregen'
-		var_rain=0
-		;;
-	6)
-		var_str_txt='Regen'
-		var_rain=0
-		;;
-	7)
-		var_str_txt='Schauer'
-		var_rain=0
-		;;
-	9)
-		var_str_txt='Gewitter'
-		var_rain=0
-		;;
-	10)
-		var_str_txt='leicht bewölkt'
-		var_rain=1
-		;;
-	20)
-		var_str_txt='wolkig'
-		var_rain=1
-		;;
-	30)
-		var_str_txt='bedeckt'
-		var_rain=1
-		;;
-	40)
-		var_str_txt='Nebel'
-		var_rain=0
-		;;
-	45)
-		var_str_txt='Nebel'
-		var_rain=0
-		;;
-	48)
-		var_str_txt='Nebel mit Reifbildung'
-		var_rain=0
-		;;
-	49)
-		var_str_txt='Nebel mit Reifbildung'
-		var_rain=0
-		;;
-	50)
-		var_str_txt='Sprühregen'
-		var_rain=0
-		;;
-	51)
-		var_str_txt='leichter Spruehregen'
-		var_rain=0
-		;;
-	53)
-		var_str_txt='Sprühregen'
-		var_rain=0
-		;;
-	55)
-		var_str_txt='starker Sprühregen'
-		var_rain=0
-		;;
-	56)
-		var_str_txt='leichter Spruehregen, gefrierend'
-		var_rain=0
-		;;
-	57)
-		var_str_txt='starker Spruehregen, gefrierend'
-		var_rain=0
-		;;
-	60)
-		var_str_txt='leichter Regen'
-		var_rain=0
-		;;
-	61)
-		var_str_txt='leichter Regen'
-		var_rain=0
-		;;
-	63)
-		var_str_txt='maessiger Regen'
-		var_rain=0
-		;;
-	65)
-		var_str_txt='starker Regen'
-		var_rain=0
-		;;
-	66)
-		var_str_txt='leichter Regen, gefrierend'
-		var_rain=0
-		;;
-	67)
-		var_str_txt='maessiger Regen od. starker Regen, gefrierend'
-		var_rain=0
-		;;
-	68)
-		var_str_txt='leichter Schnee-Regen'
-		var_rain=0
-		;;
-	69)
-		var_str_txt='starker Schnee-Regen'
-		var_rain=0
-		;;
-	70)
-		var_str_txt='leichter Schneefall'
-		var_rain=0
-		;;
-	71)
-		var_str_txt='leichter Schneefall'
-		var_rain=0
-		;;
-	73)
-		var_str_txt='maessiger Schneefall'
-		var_rain=0
-		;;
-	75)
-		var_str_txt='starker Schneefall'
-		var_rain=0
-		;;
-	80)
-		var_str_txt='leichter Regen - Schauer'
-		var_rain=0
-		;;
-	81)
-		var_str_txt='Regen - Schauer'
-		var_rain=0
-		;;
-	82)
-		var_str_txt='starker Regen - Schauer'
-		var_rain=0
-		;;
-	83)
-		var_str_txt='leichter Schnee/Regen - Schauer'
-		var_rain=0
-		;;
-	84)
-		var_str_txt='starker Schnee/Regen - Schauer'
-		var_rain=0
-		;;
-	85)
-		var_str_txt='leichter Schnee/Regen - Schauer'
-		var_rain=0
-		;;
-	86)
-		var_str_txt='maessiger oder starker Schnee - Schauer'
-		var_rain=0
-		;;
-	90)
-		var_str_txt='Gewitter'
-		var_rain=0
-		;;
-	95)
-		var_str_txt='leichtes Gewitter'
-		var_rain=0
-		;;
-	96)
-		var_str_txt='starkes Gewitter'
-		var_rain=0
-		;;
-	999)
-		var_str_txt='Keine Angabe'
+	"*egen*")
 		var_rain=0
 		;;
 	*)
-		var_str_txt='neuer Status - Doku prüfen'
-		var_rain=0
+		var_rain=1
 		;;
 	esac
 }
 
-
-merge () {
-	clean $1
-		translate $var_str
+xmlproc () {
+		max_temp=$(xmlstarlet sel -t -v "//time[@value='$1']/tx" $FORECAST_FILE)
+		min_temp=$(xmlstarlet sel -t -v "//time[@value='$1']/tn" $FORECAST_FILE)
+		var_str_txt=$(xmlstarlet sel -t -v "//time[@value='$1']/w_txt" $FORECAST_FILE)
 }
 
 echo `date +%Y%m%d-%H%M%S`": END of string processing" | tee -a $LOG
-
-
-
 
 echo `date +%Y%m%d-%H%M%S`": START of weather forecast processing" | tee -a $LOG
 if [ -e $FORECAST_FILE ]; then
 
 H=$(date +%H)
 	if [ 3 -le $H ] && [ $H -lt 11 ]; then 
-#06:00 a.m. weather 
-	merge $(sed -n '22{p;q}' $FORECAST_FILE)
-	clean $(sed -n '23{p;q}' $FORECAST_FILE)
-	max_temp=$var_str
-	clean $(sed -n '24{p;q}' $FORECAST_FILE)
-	min_temp=$var_str
+		xmlproc "06:00"
 	elif [ 11 -le $H ] && [ $H -lt 17 ]; then 
-#11:00 a.m.
-	merge $(sed -n '30{p;q}' $FORECAST_FILE)
-	clean $(sed -n '31{p;q}' $FORECAST_FILE)
-	max_temp=$var_str
-	clean $(sed -n '32{p;q}' $FORECAST_FILE)
-	min_temp=$var_str
-	elif [ 17 -le $H ] && [ $H -lt 23 ]; then
-#5 p.m.
-	merge $(sed -n '38{p;q}' $FORECAST_FILE)
-	clean $(sed -n '39{p;q}' $FORECAST_FILE)
-	max_temp=$var_str
-	clean $(sed -n '40{p;q}' $FORECAST_FILE)
-	min_temp=$var_str
+		xmlproc "11:00"
+	elif [ 17 -le $H ] && [ $H -lt 23 ]; then	
+		xmlproc "17:00"
 	else
-#11 p.m.
-	merge $(sed -n '46{p;q}' $FORECAST_FILE)
-	clean $(sed -n '47{p;q}' $FORECAST_FILE)
-	max_temp=$var_str
-	clean $(sed -n '48{p;q}' $FORECAST_FILE)
-	min_temp=$var_str
+		xmlproc "23:00"
 	fi
 	fi
+
+#Beregnung ja oder nein
+		case "$var_str_txt" in
+	*egen*)
+		var_rain=0
+		;;
+	*)
+		var_rain=1
+		;;
+	esac
+
 	echo `date +%Y%m%d-%H%M%S`": END of weather forecast processing" | tee -a $LOG
 
 #check if temperatures are zero/empty otherwise mysql brings an error
