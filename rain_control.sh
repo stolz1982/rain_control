@@ -139,59 +139,30 @@ fi
 if [ $CONSIDERING_WEATHERFORECAST -ne 0 ]; then
 
 
-#Initial deleting File
-rm -f ./$FORECAST_FILE
 
 #Getting weather forecast data
-echo `date +%Y%m%d-%H%M%S`": START to get $FORECAST_FILE" | tee -a $LOG
-wget $FC -O ./$FORECAST_FILE 1>/dev/null 2>&1
+echo `date +%Y%m%d-%H%M%S`": START to get weather data" | tee -a $LOG
+
+json=$(curl -s "https://api.openweathermap.org/data/2.5/forecast?lat=52.607&lon=12.8737&units=metric&lang=de&appid=fa80b25eaa81772cad9a62f841bffe4d")
+
+temp=$(echo "$json" | jq -r '.list[0].main.temp')
+temp_min=$(echo "$json" | jq -r '.list[0].main.temp_min')
+temp_max=$(echo "$json" | jq -r '.list[0].main.temp_max')
+desc=$(echo "$json" | jq -r '.list[0].weather[0].description')
+
+echo `date +%Y%m%d-%H%M%S`": Temperature: $temp" | tee -a $LOG
+echo `date +%Y%m%d-%H%M%S`": Description: $desc" | tee -a $LOG
 
 if [ $? -eq 0 ]; then
-echo `date +%Y%m%d-%H%M%S`": FINISHED to get $FORECAST_FILE" | tee -a $LOG
+echo `date +%Y%m%d-%H%M%S`": FINISHED to get weather data" | tee -a $LOG
 else
-echo `date +%Y%m%d-%H%M%S`": ERROR during trying to get $FORECAST_FILE" | tee -a $LOG
+echo `date +%Y%m%d-%H%M%S`": ERROR during trying to get weather data" | tee -a $LOG
 fi
 
 echo `date +%Y%m%d-%H%M%S`": Start of string processing" | tee -a $LOG
 
-#translate is a function to define whether or not raining will take place 
-translate () {
-		var_rain=0  #bedeutet keine Beregnung
-		case $1 in
-	"*egen*")
-		var_rain=0
-		;;
-	*)
-		var_rain=1
-		;;
-	esac
-}
-
-xmlproc () {
-		max_temp=$(xmlstarlet sel -t -v "//time[@value='$1']/tx" $FORECAST_FILE)
-		min_temp=$(xmlstarlet sel -t -v "//time[@value='$1']/tn" $FORECAST_FILE)
-		var_str_txt=$(xmlstarlet sel -t -v "//time[@value='$1']/w_txt" $FORECAST_FILE)
-}
-
-echo `date +%Y%m%d-%H%M%S`": END of string processing" | tee -a $LOG
-
-echo `date +%Y%m%d-%H%M%S`": START of weather forecast processing" | tee -a $LOG
-if [ -e $FORECAST_FILE ]; then
-
-H=$(date +%H)
-	if [ 3 -le $H ] && [ $H -lt 11 ]; then 
-		xmlproc "06:00"
-	elif [ 11 -le $H ] && [ $H -lt 17 ]; then 
-		xmlproc "11:00"
-	elif [ 17 -le $H ] && [ $H -lt 23 ]; then	
-		xmlproc "17:00"
-	else
-		xmlproc "23:00"
-	fi
-	fi
-
 #Beregnung ja oder nein
-		case "$var_str_txt" in
+		case "$desc" in
 	*egen*)
 		var_rain=0
 		;;
@@ -217,7 +188,7 @@ H=$(date +%H)
 # store the weather forecast data (pls see on top the parameter description) 
 
 #building weather forecast history
-	mysql -h $DB_SERVER_IP -u$DB_USER -p$DB_PWD -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$var_str_txt', temperatur_min = $min_temp , temperatur_max = $max_temp , beregnung=$var_rain;"
+	mysql -h $DB_SERVER_IP -u$DB_USER -p$DB_PWD -D $DATABASE_NAME -e "INSERT INTO wetterbericht set wetter_beschreibung = '$desc', temperatur_min = $temp_min , temperatur_max = $temp_max , beregnung=$var_rain;"
 
 	if [ $? -ne 0 ]; then
 	echo `date +%Y%m%d-%H%M%S`": EXIT of DB writing due to STATUS: $?. Script stopped with exit code 1" | tee -a $LOG
@@ -275,20 +246,20 @@ H=$(date +%H)
 	exit 100
 	fi
 
-	if [ $max_temp -lt $BREAK_TEMP ]; then
-	echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than $BREAK_TEMP °C degrees: $max_temp °C" | tee -a $LOG
+	if [ $temp -lt $BREAK_TEMP ]; then
+	echo `date +%Y%m%d-%H%M%S`": No raining due to temperatur less than $BREAK_TEMP °C degrees: $temp °C" | tee -a $LOG
 	echo `date +%Y%m%d-%H%M%S`": Script exit with code 101" | tee -a $LOG
 	exit 101
 	fi
 	fi
 
-	if [  $max_temp -gt $MAX_ENTERED_TEMP ]
+	if [  $temp -gt $MAX_ENTERED_TEMP ]
 	then
-	echo `date +%Y%m%d-%H%M%S`": No Raining due to Forescasted maximum temperature ($max_temp °C) less than entered temperature ($MAX_ENTERED_TEMP °C)" | tee -a $LOG
+	echo `date +%Y%m%d-%H%M%S`": No Raining due to Forescasted maximum temperature ($temp °C) less than entered temperature ($MAX_ENTERED_TEMP °C)" | tee -a $LOG
 	echo `date +%Y%m%d-%H%M%S`": Script exit with code 102" | tee -a $LOG
 	exit 102
 	else
-	echo `date +%Y%m%d-%H%M%S`": Raining due to entered temperature($MAX_ENTERED_TEMP °C) greater than forcecasted maximum temperature ($max_temp °C)" | tee -a $LOG
+	echo `date +%Y%m%d-%H%M%S`": Raining due to entered temperature($MAX_ENTERED_TEMP °C) greater than forcecasted maximum temperature ($temp °C)" | tee -a $LOG
 	fi
 
 #Turn off all possible GPIOS
@@ -315,7 +286,7 @@ i=$(( i+1 ))
 #set gpio input status = 0 which opens the appropriate ventile
 	echo `date +%Y%m%d-%H%M%S`": [RAINING] - VAR_RAIN: $var_rain, STATUS: $?" | tee -a $LOG
 	$CMD_DIR/gpio -g write $GPIO 0
-	echo `date +%Y%m%d-%H%M%S`": [RAINING] - starts because forecasted weather: $var_str_txt" | tee -a $LOG
+	echo `date +%Y%m%d-%H%M%S`": [RAINING] - starts because forecasted weather: $desc" | tee -a $LOG
 #Waiting the entered time period before closing ventile
 	echo `date +%Y%m%d-%H%M%S`": [RAINING] - sleeping for $RAIN_PERIODE seconds" | tee -a $LOG
 	sleep $RAIN_PERIODE 
@@ -325,7 +296,7 @@ i=$(( i+1 ))
 	$CMD_DIR/gpio -g write $GPIO 1
 	echo `date +%Y%m%d-%H%M%S`": [RAINING] - GPIO Input $GPIO - GPIOSTATUS: $($CMD_DIR/gpio -g read $GPIO), STATUS(function): $?" | tee -a $LOG
 	else
-	echo `date +%Y%m%d-%H%M%S`": [RAINING] - No Raining (var_rain: $var_rain - var_input_str: $var_input_str) due to forecasted weather: $var_str_txt - STATUS: $?" | tee -a $LOG
+	echo `date +%Y%m%d-%H%M%S`": [RAINING] - No Raining (var_rain: $var_rain - var_input_str: $desc) due to forecasted weather: $var_str_txt - STATUS: $?" | tee -a $LOG
 	fi
 
 #REFILL SECTION
