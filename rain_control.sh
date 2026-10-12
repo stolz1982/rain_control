@@ -143,7 +143,7 @@ if [ $CONSIDERING_WEATHERFORECAST -ne 0 ]; then
 #Getting weather forecast data
 echo `date +%Y%m%d-%H%M%S`": START to get weather data" | tee -a $LOG
 
-json=$(curl -s "https://api.openweathermap.org/data/2.5/forecast?lat=52.607&lon=12.8737&units=metric&lang=de&appid=fa80b25eaa81772cad9a62f841bffe4d")
+json=$(curl -s $URL)
 
 temp=$(echo "$json" | jq -r '.list[0].main.temp')
 temp_min=$(echo "$json" | jq -r '.list[0].main.temp_min')
